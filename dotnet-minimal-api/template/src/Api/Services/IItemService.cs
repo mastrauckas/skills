@@ -2,11 +2,11 @@ namespace Api.Services;
 
 public interface IItemService
 {
-    Task<IEnumerable<Item>> GetAllAsync();
-    Task<Item?> GetByIdAsync(int id);
-    Task<Item> CreateAsync(Item item);
-    Task<Item?> UpdateAsync(
+    Task<IEnumerable<ItemDto>> GetAllAsync();
+    Task<ItemDto?> GetByIdAsync(int id);
+    Task<ItemDto> CreateAsync(ItemDto item);
+    Task<ItemDto?> UpdateAsync(
         int id,
-        Item item);
+        ItemDto item);
     Task<bool> DeleteAsync(int id);
 }

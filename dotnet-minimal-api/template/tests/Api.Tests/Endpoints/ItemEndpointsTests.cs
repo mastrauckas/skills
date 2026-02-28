@@ -1,6 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
-using Api.Models;
+using Api.Dtos;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace Api.Tests.Endpoints;
@@ -22,7 +22,7 @@ public class ItemEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var items = await response.Content.ReadFromJsonAsync<IEnumerable<Item>>();
+        var items = await response.Content.ReadFromJsonAsync<IEnumerable<ItemDto>>();
         Assert.NotNull(items);
         Assert.NotEmpty(items);
     }
@@ -32,7 +32,7 @@ public class ItemEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
     {
         // First get all items to find a valid ID
         var getAllResponse = await _client.GetAsync("/items");
-        var items = await getAllResponse.Content.ReadFromJsonAsync<IEnumerable<Item>>();
+        var items = await getAllResponse.Content.ReadFromJsonAsync<IEnumerable<ItemDto>>();
         var itemId = items?.First().Id;
         
         if (itemId == null)
@@ -43,9 +43,9 @@ public class ItemEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var item = await response.Content.ReadFromJsonAsync<Item>();
-        Assert.NotNull(item);
-        Assert.Equal(itemId, item.Id);
+        var ItemDto = await response.Content.ReadFromJsonAsync<ItemDto>();
+        Assert.NotNull(ItemDto);
+        Assert.Equal(itemId, ItemDto.Id);
     }
 
     [Fact]
@@ -62,24 +62,24 @@ public class ItemEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
     public async Task CreateItem_WithValidRequest_ReturnsCreatedWithItem()
     {
         // Arrange
-        var request = new { name = "New Item", description = "A new item" };
+        var request = new { name = "New ItemDto", description = "A new ItemDto" };
 
         // Act
         var response = await _client.PostAsJsonAsync("/items", request);
 
         // Assert
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        var item = await response.Content.ReadFromJsonAsync<Item>();
-        Assert.NotNull(item);
-        Assert.Equal("New Item", item.Name);
-        Assert.Equal("A new item", item.Description);
+        var ItemDto = await response.Content.ReadFromJsonAsync<ItemDto>();
+        Assert.NotNull(ItemDto);
+        Assert.Equal("New ItemDto", ItemDto.Name);
+        Assert.Equal("A new ItemDto", ItemDto.Description);
     }
 
     [Fact]
     public async Task CreateItem_WithoutName_ReturnsBadRequest()
     {
         // Arrange
-        var request = new { name = "", description = "A new item" };
+        var request = new { name = "", description = "A new ItemDto" };
 
         // Act
         var response = await _client.PostAsJsonAsync("/items", request);
@@ -93,31 +93,31 @@ public class ItemEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
     {
         // First get all items to find a valid ID
         var getAllResponse = await _client.GetAsync("/items");
-        var items = await getAllResponse.Content.ReadFromJsonAsync<IEnumerable<Item>>();
+        var items = await getAllResponse.Content.ReadFromJsonAsync<IEnumerable<ItemDto>>();
         var itemId = items?.First().Id;
         
         if (itemId == null)
             return;
 
         // Arrange
-        var request = new { name = "Updated Item", description = "Updated description" };
+        var request = new { name = "Updated ItemDto", description = "Updated description" };
 
         // Act
         var response = await _client.PutAsJsonAsync($"/items/{itemId}", request);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var item = await response.Content.ReadFromJsonAsync<Item>();
-        Assert.NotNull(item);
-        Assert.Equal("Updated Item", item.Name);
-        Assert.Equal("Updated description", item.Description);
+        var ItemDto = await response.Content.ReadFromJsonAsync<ItemDto>();
+        Assert.NotNull(ItemDto);
+        Assert.Equal("Updated ItemDto", ItemDto.Name);
+        Assert.Equal("Updated description", ItemDto.Description);
     }
 
     [Fact]
     public async Task UpdateItem_WithInvalidId_ReturnsNotFound()
     {
         // Arrange
-        var request = new { name = "Updated Item", description = "Updated description" };
+        var request = new { name = "Updated ItemDto", description = "Updated description" };
 
         // Act
         var response = await _client.PutAsJsonAsync("/items/999", request);
@@ -131,7 +131,7 @@ public class ItemEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
     {
         // First get all items to find a valid ID
         var getAllResponse = await _client.GetAsync("/items");
-        var items = await getAllResponse.Content.ReadFromJsonAsync<IEnumerable<Item>>();
+        var items = await getAllResponse.Content.ReadFromJsonAsync<IEnumerable<ItemDto>>();
         var itemId = items?.First().Id;
         
         if (itemId == null)
@@ -152,7 +152,7 @@ public class ItemEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
     {
         // First, get all items to know what ID to delete
         var getResponse = await _client.GetAsync("/items");
-        var items = await getResponse.Content.ReadFromJsonAsync<IEnumerable<Item>>();
+        var items = await getResponse.Content.ReadFromJsonAsync<IEnumerable<ItemDto>>();
         var itemToDelete = items?.First();
         
         if (itemToDelete == null)
