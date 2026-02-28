@@ -1,0 +1,32 @@
+2026-02-28 13:58:24.307 -05:00 [INF] User profile is available. Using 'C:\Users\mastr\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-02-28 13:58:24.498 -05:00 [WRN] The ASP.NET Core developer certificate is not trusted. For information about trusting the ASP.NET Core developer certificate, see https://aka.ms/aspnet/https-trust-dev-cert
+2026-02-28 13:58:24.534 -05:00 [INF] Now listening on: https://localhost:7105
+2026-02-28 13:58:24.535 -05:00 [INF] Now listening on: http://localhost:5262
+2026-02-28 13:58:24.542 -05:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2026-02-28 13:58:24.566 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-28 13:58:24.567 -05:00 [INF] Hosting environment: Development
+2026-02-28 13:58:24.567 -05:00 [INF] Content root path: D:\projects\NormalProjects\skills\dotnet-minimal-api\template\src\Api
+2026-02-28 13:59:28.660 -05:00 [INF] User profile is available. Using 'C:\Users\mastr\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-02-28 13:59:28.829 -05:00 [WRN] The ASP.NET Core developer certificate is not trusted. For information about trusting the ASP.NET Core developer certificate, see https://aka.ms/aspnet/https-trust-dev-cert
+2026-02-28 13:59:28.878 -05:00 [INF] Now listening on: https://localhost:7105
+2026-02-28 13:59:28.879 -05:00 [INF] Now listening on: http://localhost:5262
+2026-02-28 13:59:28.883 -05:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2026-02-28 13:59:28.900 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-28 13:59:28.901 -05:00 [INF] Hosting environment: Development
+2026-02-28 13:59:28.901 -05:00 [INF] Content root path: D:\projects\NormalProjects\skills\dotnet-minimal-api\template\src\Api
+2026-02-28 13:59:44.328 -05:00 [INF] User profile is available. Using 'C:\Users\mastr\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-02-28 13:59:44.487 -05:00 [WRN] The ASP.NET Core developer certificate is not trusted. For information about trusting the ASP.NET Core developer certificate, see https://aka.ms/aspnet/https-trust-dev-cert
+2026-02-28 13:59:44.515 -05:00 [INF] Now listening on: https://localhost:7105
+2026-02-28 13:59:44.516 -05:00 [INF] Now listening on: http://localhost:5262
+2026-02-28 13:59:44.519 -05:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2026-02-28 13:59:44.537 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-28 13:59:44.537 -05:00 [INF] Hosting environment: Development
+2026-02-28 13:59:44.538 -05:00 [INF] Content root path: D:\projects\NormalProjects\skills\dotnet-minimal-api\template\src\Api
+2026-02-28 14:00:35.433 -05:00 [INF] User profile is available. Using 'C:\Users\mastr\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-02-28 14:00:35.612 -05:00 [WRN] The ASP.NET Core developer certificate is not trusted. For information about trusting the ASP.NET Core developer certificate, see https://aka.ms/aspnet/https-trust-dev-cert
+2026-02-28 14:00:35.670 -05:00 [INF] Now listening on: https://localhost:7105
+2026-02-28 14:00:35.671 -05:00 [INF] Now listening on: http://localhost:5262
+2026-02-28 14:00:35.676 -05:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2026-02-28 14:00:35.696 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-28 14:00:35.697 -05:00 [INF] Hosting environment: Development
+2026-02-28 14:00:35.698 -05:00 [INF] Content root path: D:\projects\NormalProjects\skills\dotnet-minimal-api\template\src\Api
