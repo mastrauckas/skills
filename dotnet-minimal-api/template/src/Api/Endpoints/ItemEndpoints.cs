@@ -9,35 +9,24 @@ public static class ItemEndpointExtensions
             var group = root.MapGroup("/items").WithTags("Items");
 
             group.MapGet("/", GetAllItems)
-                .WithName("GetAllItems")
-                .WithSummary("Get all items")
-                .Produces<IEnumerable<ItemDto>>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status404NotFound);
+                .WithName("ListItems")
+                .WithSummary("List all items");
 
             group.MapGet("/{id:int}", GetItemById)
-                .WithName("GetItemById")
-                .WithSummary("Get an item by ID")
-                .Produces<ItemDto>(StatusCodes.Status200OK)
-                .Produces(StatusCodes.Status404NotFound);
+                .WithName("GetItem")
+                .WithSummary("Get an item by ID");
 
             group.MapPost("/", CreateItem)
                 .WithName("CreateItem")
-                .WithSummary("Create a new item")
-                .Produces<ItemDto>(StatusCodes.Status201Created)
-                .Produces(StatusCodes.Status400BadRequest);
+                .WithSummary("Create a new item");
 
             group.MapPut("/{id:int}", UpdateItem)
                 .WithName("UpdateItem")
-                .WithSummary("Update an item")
-                .Produces<ItemDto>(StatusCodes.Status200OK)
-                .Produces(StatusCodes.Status404NotFound)
-                .Produces(StatusCodes.Status400BadRequest);
+                .WithSummary("Update an item");
 
             group.MapDelete("/{id:int}", DeleteItem)
                 .WithName("DeleteItem")
-                .WithSummary("Delete an item")
-                .Produces(StatusCodes.Status204NoContent)
-                .Produces(StatusCodes.Status404NotFound);
+                .WithSummary("Delete an item");
         }
     }
 
