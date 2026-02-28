@@ -6,4 +6,8 @@
     <Project Path="tests/Api.IntegrationTests/Api.IntegrationTests.csproj" />
     <Project Path="tests/Api.UnitTests/Api.UnitTests.csproj" />
   </Folder>
+  <Folder Name="/http-files/">
+    <File Path="http-files/items.http" />
+    <File Path="http-files/health.http" />
+  </Folder>
 </Solution>
