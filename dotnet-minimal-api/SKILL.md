@@ -3,41 +3,95 @@ name: dotnet-minimal-api
 description: Guide for creating .NET Minimal API projects following best practices. Use this when asked to create, scaffold, or extend a .NET Minimal API application.
 ---
 
+## Scaffolding a New Project
+
+When asked to create a new project, **ask the user the following questions before doing any work**:
+
+1. **Solution name** — what should the solution be called? (default: `MyMinimalWebApp`)
+2. **Project name** — what should the API project be called? (default: `MyMinimalWebApp.Api`)
+3. **Output directory** — where should the project be created? (defaults to the current working directory)
+
+Once you have the answers:
+- Rename `MyMinimalWebApp.slnx` → `<SolutionName>.slnx`
+- Rename `src/MyMinimalWebApp.Api/` → `src/<ProjectName>/`
+- Rename `src/MyMinimalWebApp.Api/MyMinimalWebApp.Api.csproj` → `src/<ProjectName>/<ProjectName>.csproj`
+- Update all namespace references from `MyMinimalWebApp.Api` → `<ProjectName>` throughout all `.cs` files
+- Update all project references in the `.slnx` file
+- Replace `Item`/`Items` with the appropriate domain entity name if provided
+
 ## Template
 
 A complete working reference solution is included in the `template/` directory alongside this file. When scaffolding a new project, use this template as the starting point — copy and rename it, replacing `Item`/`Items` with the appropriate domain entity name.
 
 ```
 template/
-  Api.slnx
+  Api.slnx                                  ← solution with src/, tests/, http-files/ folders
+  global.json                               ← pins .NET SDK version
+  Directory.Build.props                     ← shared build properties (TreatWarningsAsErrors, EnforceCodeStyleInBuild)
+  Directory.Packages.props                  ← Central Package Management (all NuGet versions here)
+  Directory.Build.targets                   ← placeholder for post-build targets
+  .editorconfig                             ← C# coding style rules at :warning severity
+  .gitignore                                ← .NET gitignore (bin, obj, logs, TestResults)
   src/
     Api/
-      Program.cs                          ← 4 lines, delegates to Configuration classes
+      Program.cs                            ← minimal: UseSerilog + ConfigureBuilder + ConfigureApp
+      GlobalUsings.cs                       ← all global usings centralized here
       Configuration/
-        BuilderConfiguration.cs           ← all service registrations
-        AppConfiguration.cs               ← all middleware and endpoint mapping
-      Endpoints/ItemEndpoints.cs
-      Models/Item.cs
-      Services/IItemService.cs
-      Services/ItemService.cs
-      appsettings.json                    ← includes Cors:AllowedOrigins
+        BuilderConfiguration.cs             ← all service registrations (RegisterX methods)
+        AppConfiguration.cs                 ← all middleware and endpoint mapping
+      Endpoints/
+        HttpRoutes.cs                       ← creates api root group, calls MapItemEndpoints
+        ItemEndpoints.cs                    ← 5 CRUD endpoints as private static handlers
+      Dtos/
+        ItemDto.cs                          ← response DTO
+        ItemRequests.cs                     ← CreateItemRequest, UpdateItemRequest
+      Logging/
+        Log.cs                              ← [LoggerMessage] source-generated log methods
+      Middleware/
+        ExceptionMiddleware.cs              ← catches unhandled exceptions, returns ProblemDetails
+      Models/
+        Item.cs
+      Services/
+        IItemService.cs
+        ItemService.cs
+      Properties/
+        launchSettings.json                 ← Kestrel profiles, launchBrowser: false
+      appsettings.json                      ← Serilog, Cors, ConnectionStrings, Auth, KeyVault
+      appsettings.Development.json          ← Debug log level override
+      appsettings.Production.json           ← Warning log level override
   tests/
-    Api.Tests/
-      Endpoints/ItemEndpointsTests.cs
+    Api.IntegrationTests/
+      Endpoints/ItemEndpointsTests.cs       ← WebApplicationFactory<Program> integration tests
+      HealthChecks/HealthCheckTests.cs      ← /health, /health/live, /health/ready tests
+      Middleware/ExceptionMiddlewareTests.cs ← 500 + ProblemDetails test
+    Api.UnitTests/
+      Services/ItemServiceTests.cs          ← unit tests with Bogus test data
+  http-files/
+    items.http                              ← all CRUD requests
+    health.http                             ← health check requests
 ```
+
+## Coding Conventions
+
+- All `using` statements → `GlobalUsings.cs` only
+- Use `var` when type is apparent from the right-hand side (constructor calls, `.ToList()`)
+- Use explicit type when type is not apparent (method return values, async results)
+- 2+ parameters → each on its own line
+- Method chains with 2+ dots → each `.` on its own line
+- `TreatWarningsAsErrors = true` + `EnforceCodeStyleInBuild = true` — all style rules enforced at build time
+- ILogger aliases in GlobalUsings: `ILogger` = `Microsoft.Extensions.Logging.ILogger`, `SerilogLogger` = `Serilog.ILogger`
 
 ## Key Patterns
 
 ### Program.cs
 
 ```csharp
-var builder = WebApplication.CreateBuilder(args);
-builder.RegisterOpenApi();
-builder.RegisterAuthentication();
-builder.RegisterCors();
-builder.RegisterServices();
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog((ctx, config) =>
+    config.ReadFrom.Configuration(ctx.Configuration));
+builder.ConfigureBuilder();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 app.ConfigureApp();
 app.Run();
 
@@ -46,54 +100,61 @@ public partial class Program { }
 
 ### BuilderConfiguration.cs
 
-Extension block on `WebApplicationBuilder` with separate `RegisterX()` methods per concern:
+Extension block on `WebApplicationBuilder` — one `RegisterX()` method per concern:
 
 ```csharp
 public static class BuilderConfigurationExtensions
 {
     extension(WebApplicationBuilder builder)
     {
-        public void RegisterOpenApi()
+        public void ConfigureBuilder()
         {
-            builder.Services.AddOpenApi();
-            builder.Services.AddEndpointsApiExplorer();
-        }
-
-        public void RegisterAuthentication()
-        {
-            builder.Services.AddAuthentication();
-            builder.Services.AddAuthorization();
+            builder.RegisterOpenApi();
+            builder.RegisterAuthentication();
+            builder.RegisterCors();
+            builder.RegisterRateLimiting();
+            builder.RegisterHealthChecks();
+            builder.RegisterProblemDetails();
+            builder.RegisterLogging();
+            builder.RegisterDatabase();
+            builder.RegisterValidation();
+            builder.RegisterServices();
         }
 
         public void RegisterCors()
         {
-            var allowedOrigins = builder.Configuration
-                .GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
+            string[] allowedOrigins = builder
+                .Configuration
+                .GetSection("Cors:AllowedOrigins")
+                .Get<string[]>() ?? [];
 
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("AllowLocalAngularDevelopment", policy =>
-                {
-                    policy.WithOrigins(allowedOrigins)
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials();
-                });
-            });
+            builder.Services.AddCors(options => { ... });
         }
 
+        public void RegisterHealthChecks()
+        {
+            builder.Services
+                .AddHealthChecks()
+                .AddCheck("live", () => HealthCheckResult.Healthy(), tags: ["live"]);
+                // Add dependency checks tagged "ready" for readiness probe
+        }
+
+        public void RegisterProblemDetails() => builder.Services.AddProblemDetails();
+        public void RegisterValidation() => builder.Services.AddValidation();
+
+#pragma warning disable IDE0022
         public void RegisterServices()
         {
-            // Feature services
-            builder.Services.AddItemServices();
+            builder.Services.AddSingleton<IItemService, ItemService>();
         }
+#pragma warning restore IDE0022
     }
 }
 ```
 
 ### AppConfiguration.cs
 
-Extension block on `WebApplication` for middleware pipeline and endpoint mapping:
+Extension block on `WebApplication` — middleware pipeline and endpoint mapping:
 
 ```csharp
 public static class AppConfigurationExtensions
@@ -102,56 +163,109 @@ public static class AppConfigurationExtensions
     {
         public void ConfigureApp()
         {
-            app.UseExceptionHandler(...);   // JSON problem details
-            app.UseCors("AllowLocalAngularDevelopment");
+            app.UseMiddleware<ExceptionMiddleware>();
+            app.UseSerilogRequestLogging();
+
+            if (app.Environment.IsDevelopment())
+                app.UseCors("AllowLocalAngularDevelopment");
+
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseRateLimiter();
             app.MapOpenApi();
 
-            // Feature endpoints
-            app.MapItemEndpoints();
+            app.MapHealthChecks("/health");
+            app.MapHealthChecks("/health/live", new HealthCheckOptions
+            {
+                Predicate = check => check.Tags.Contains("live")
+            });
+            app.MapHealthChecks("/health/ready", new HealthCheckOptions
+            {
+                Predicate = check => check.Tags.Contains("ready")
+            });
+
+            app.ConfigureHttpRoutes();
         }
     }
 }
 ```
 
-### Endpoints
+### HttpRoutes.cs + Endpoints
 
-- Use C# 14 extension blocks on `IEndpointRouteBuilder`
-- Use `app.MapGroup("/items").WithTags("Items")`
-- Always use `TypedResults` (not `Results`) for strongly-typed responses
-- Each endpoint decorated with `.WithName()`, `.WithSummary()`, `.Produces<T>()`
+`HttpRoutes.cs` creates the `api` root group and delegates to feature endpoint mappers:
 
 ```csharp
-public static class ItemEndpointExtensions
+extension(WebApplication app)
 {
-    extension(IEndpointRouteBuilder app)
+    public void ConfigureHttpRoutes()
     {
-        public IEndpointRouteBuilder MapItemEndpoints()
-        {
-            var group = app.MapGroup("/items").WithTags("Items");
-            group.MapGet("/", GetAllItems).WithName("GetAllItems")...;
-            // ...
-            return app;
-        }
+        RouteGroupBuilder root = app.MapGroup("api");
+        app.MapItemEndpoints(root);
     }
+}
+```
 
-    private static async Task<Ok<IEnumerable<Item>>> GetAllItems(IItemService service) => ...;
+`ItemEndpoints.cs` extends `WebApplication`, receives the root group:
+
+```csharp
+extension(WebApplication app)
+{
+    public void MapItemEndpoints(RouteGroupBuilder root)
+    {
+        RouteGroupBuilder group = root
+            .MapGroup("/items")
+            .WithTags("Items");
+
+        group.MapGet("/", GetAllItems).WithName("ListItems")...;
+        group.MapGet("/{id:int}", GetItemById).WithName("GetItem")...;
+        group.MapPost("/", CreateItem).WithName("CreateItem")...;
+        group.MapPut("/{id:int}", UpdateItem).WithName("UpdateItem")...;
+        group.MapDelete("/{id:int}", DeleteItem).WithName("DeleteItem")...;
+    }
 }
 
-### appsettings.json
+// Handlers are private static methods — TypedResults infers OpenAPI responses automatically
+// Do NOT add .Produces<T>() — TypedResults + Results<T1,T2> return types handle it
+private static async Task<Ok<IEnumerable<ItemDto>>> GetAllItems(IItemService service)
+{
+    IEnumerable<ItemDto> items = await service.GetAllAsync();
+    return TypedResults.Ok(items);
+}
+```
+
+### Serilog (appsettings.json)
+
+Configured entirely via `appsettings.json` — no code changes needed to add sinks:
 
 ```json
 {
-  "Cors": {
-    "AllowedOrigins": ["http://localhost:4200"]
+  "Serilog": {
+    "Using": [ "Serilog.Sinks.Console", "Serilog.Sinks.File" ],
+    "MinimumLevel": {
+      "Default": "Information",
+      "Override": {
+        "Microsoft": "Warning",
+        "Microsoft.AspNetCore": "Warning"
+      }
+    },
+    "WriteTo": [
+      { "Name": "Console" },
+      { "Name": "File", "Args": { "path": "logs/api-.log", "rollingInterval": "Day", "retainedFileCountLimit": 10 } }
+    ],
+    "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ]
   }
 }
 ```
 
+Additional sinks (Seq, App Insights, Blob Storage, Cosmos DB, Elasticsearch, Loki, Datadog, SQL Server, MongoDB) are documented as comments in `RegisterLogging()` inside `BuilderConfiguration.cs`.
+
 ### Testing
 
-Use `WebApplicationFactory<Program>` for integration tests. The `public partial class Program {}` at the bottom of `Program.cs` makes it accessible.
+Two test projects:
+- **`Api.IntegrationTests`** — `WebApplicationFactory<Program>`, tests HTTP endpoints and middleware
+- **`Api.UnitTests`** — tests service layer directly with Bogus for test data, NSubstitute for mocks
+
+`public partial class Program {}` at the bottom of `Program.cs` is required for `WebApplicationFactory<Program>`.
 
 ```csharp
 public class ItemEndpointsTests(WebApplicationFactory<Program> factory)
@@ -160,8 +274,7 @@ public class ItemEndpointsTests(WebApplicationFactory<Program> factory)
     [Fact]
     public async Task GetAllItems_ReturnsOk()
     {
-        var client = factory.CreateClient();
-        var response = await client.GetAsync("/items");
+        HttpResponseMessage response = await factory.CreateClient().GetAsync("/api/items");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 }

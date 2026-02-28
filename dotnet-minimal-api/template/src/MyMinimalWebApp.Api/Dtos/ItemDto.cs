@@ -1,4 +1,4 @@
-namespace Api.Dtos;
+namespace MyMinimalWebApp.Api.Dtos;
 
 public record ItemDto(
     int Id,

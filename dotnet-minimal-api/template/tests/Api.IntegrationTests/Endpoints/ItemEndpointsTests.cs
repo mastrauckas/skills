@@ -1,6 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
-using Api.Dtos;
+using MyMinimalWebApp.Api.Dtos;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace Api.IntegrationTests.Endpoints;

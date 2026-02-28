@@ -1,5 +1,5 @@
-using Api.Dtos;
-using Api.Services;
+using MyMinimalWebApp.Api.Dtos;
+using MyMinimalWebApp.Api.Services;
 using Bogus;
 
 namespace Api.UnitTests.Services;

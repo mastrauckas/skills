@@ -1,4 +1,4 @@
-namespace Api.Services;
+namespace MyMinimalWebApp.Api.Services;
 
 public class ItemService : IItemService
 {

@@ -34,7 +34,7 @@ public class ThrowingAppFactory : WebApplicationFactory<Program>
     {
         builder.Configure(app =>
         {
-            app.UseMiddleware<Api.Middleware.ExceptionMiddleware>();
+            app.UseMiddleware<MyMinimalWebApp.Api.Middleware.ExceptionMiddleware>();
             app.Map("/throw", throwApp =>
                 throwApp.Run(_ => throw new InvalidOperationException("Test unhandled exception")));
         });

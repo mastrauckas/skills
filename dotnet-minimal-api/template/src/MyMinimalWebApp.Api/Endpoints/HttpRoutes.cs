@@ -1,4 +1,4 @@
-namespace Api.Endpoints;
+namespace MyMinimalWebApp.Api.Endpoints;
 
 public static class HttpRoutesExtensions
 {

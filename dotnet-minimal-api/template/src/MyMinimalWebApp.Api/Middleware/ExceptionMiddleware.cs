@@ -1,4 +1,4 @@
-namespace Api.Middleware;
+namespace MyMinimalWebApp.Api.Middleware;
 
 public class ExceptionMiddleware(
     RequestDelegate next,

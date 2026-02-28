@@ -1,11 +1,11 @@
 global using System.ComponentModel.DataAnnotations;
 global using System.Threading.RateLimiting;
-global using Api.Configuration;
-global using Api.Endpoints;
-global using Api.Logging;
-global using Api.Middleware;
-global using Api.Dtos;
-global using Api.Services;
+global using MyMinimalWebApp.Api.Configuration;
+global using MyMinimalWebApp.Api.Endpoints;
+global using MyMinimalWebApp.Api.Logging;
+global using MyMinimalWebApp.Api.Middleware;
+global using MyMinimalWebApp.Api.Dtos;
+global using MyMinimalWebApp.Api.Services;
 global using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 global using Microsoft.Extensions.Diagnostics.HealthChecks;
 global using Microsoft.AspNetCore.Http.HttpResults;

@@ -1,4 +1,4 @@
-namespace Api.Configuration;
+namespace MyMinimalWebApp.Api.Configuration;
 
 public static class BuilderConfigurationExtensions
 {

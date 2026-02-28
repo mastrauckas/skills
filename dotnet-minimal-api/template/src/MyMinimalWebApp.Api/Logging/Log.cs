@@ -1,4 +1,4 @@
-namespace Api.Logging;
+namespace MyMinimalWebApp.Api.Logging;
 
 internal static partial class Log
 {
