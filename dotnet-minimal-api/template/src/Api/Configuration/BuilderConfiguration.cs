@@ -113,10 +113,12 @@ public static class BuilderConfigurationExtensions
             // builder.Services.AddSingleton<IDbConnectionFactory, SqlConnectionFactory>();
         }
 
+        // Register feature services and repositories here
+#pragma warning disable IDE0022
         public void RegisterServices()
         {
-            // Register feature services and repositories here
             builder.Services.AddSingleton<IItemService, ItemService>();
         }
+#pragma warning restore IDE0022
     }
 }
