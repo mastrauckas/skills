@@ -56,8 +56,8 @@ public static class BuilderConfigurationExtensions
 
         public void RegisterServices()
         {
-            // Feature services
-            builder.Services.AddItemServices();
+            // Register feature services and repositories here
+            builder.Services.AddSingleton<IItemService, ItemService>();
         }
     }
 }

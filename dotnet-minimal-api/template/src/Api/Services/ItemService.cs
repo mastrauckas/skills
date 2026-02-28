@@ -52,15 +52,3 @@ public class ItemService : IItemService
         return Task.FromResult(true);
     }
 }
-
-public static class ItemServiceExtensions
-{
-    extension(IServiceCollection services)
-    {
-        public IServiceCollection AddItemServices()
-        {
-            services.AddSingleton<IItemService, ItemService>();
-            return services;
-        }
-    }
-}
