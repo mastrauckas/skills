@@ -113,8 +113,10 @@ public static class BuilderConfigurationExtensions
             // builder.Services.AddSingleton<IDbConnectionFactory, SqlConnectionFactory>();
         }
 
-        // Register feature services and repositories here
-        public void RegisterServices() =>
+        public void RegisterServices()
+        {
+            // Register feature services and repositories here
             builder.Services.AddSingleton<IItemService, ItemService>();
+        }
     }
 }
