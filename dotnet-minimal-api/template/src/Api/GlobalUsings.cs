@@ -1,4 +1,5 @@
 global using System.ComponentModel.DataAnnotations;
+global using System.Threading.RateLimiting;
 global using Api.Configuration;
 global using Api.Endpoints;
 global using Api.Logging;
@@ -6,4 +7,5 @@ global using Api.Middleware;
 global using Api.Dtos;
 global using Api.Services;
 global using Microsoft.AspNetCore.Http.HttpResults;
+global using Microsoft.AspNetCore.RateLimiting;
 global using Microsoft.Extensions.DependencyInjection;

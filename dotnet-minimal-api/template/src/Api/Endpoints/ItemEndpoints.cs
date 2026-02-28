@@ -66,7 +66,7 @@ public static class ItemEndpointExtensions
     {
         var item = new ItemDto(0, request.Name, request.Description);
         var created = await service.CreateAsync(item);
-        return TypedResults.Created($"/items/{created.Id}", created);
+        return TypedResults.Created($"/api/items/{created.Id}", created);
     }
 
     private static async Task<Results<Ok<ItemDto>, NotFound>> UpdateItem(

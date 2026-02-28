@@ -9,6 +9,9 @@ public static class BuilderConfigurationExtensions
             builder.RegisterOpenApi();
             builder.RegisterAuthentication();
             builder.RegisterCors();
+            builder.RegisterRateLimiting();
+            builder.RegisterHealthChecks();
+            builder.RegisterProblemDetails();
             builder.RegisterDatabase();
             builder.RegisterValidation();
             builder.RegisterServices();
@@ -50,6 +53,44 @@ public static class BuilderConfigurationExtensions
                         .AllowCredentials();
                 });
             });
+        }
+
+        public void RegisterRateLimiting()
+        {
+            builder.Services.AddRateLimiter(options =>
+            {
+                options.AddFixedWindowLimiter("fixed", limiter =>
+                {
+                    limiter.PermitLimit = 100;
+                    limiter.Window = TimeSpan.FromSeconds(10);
+                    limiter.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+                    limiter.QueueLimit = 10;
+                });
+                options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+            });
+        }
+
+        public void RegisterHealthChecks()
+        {
+            builder.Services.AddHealthChecks();
+            // Add additional health checks as needed. Examples:
+            // .AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!)  // SQL Server connectivity (requires AspNetCore.HealthChecks.SqlServer)
+            // .AddNpgSql(builder.Configuration.GetConnectionString("DefaultConnection")!)     // PostgreSQL connectivity (requires AspNetCore.HealthChecks.NpgSql)
+            // .AddRedis(builder.Configuration.GetConnectionString("Redis")!)                  // Redis cache connectivity (requires AspNetCore.HealthChecks.Redis)
+            // .AddRabbitMQ(builder.Configuration.GetConnectionString("RabbitMQ")!)            // RabbitMQ message broker (requires AspNetCore.HealthChecks.RabbitMQ)
+            // .AddMongoDb(builder.Configuration.GetConnectionString("MongoDB")!)              // MongoDB connectivity (requires AspNetCore.HealthChecks.MongoDb)
+            // .AddCosmosDb(builder.Configuration.GetConnectionString("CosmosDb")!)            // Azure Cosmos DB connectivity (requires AspNetCore.HealthChecks.CosmosDb)
+            // .AddAzureServiceBusQueue(builder.Configuration.GetConnectionString("ServiceBus")!, "queue-name")  // Azure Service Bus queue (requires AspNetCore.HealthChecks.AzureServiceBus)
+            // .AddAzureBlobStorage(builder.Configuration.GetConnectionString("BlobStorage")!)   // Azure Blob Storage (requires AspNetCore.HealthChecks.AzureBlobStorage)
+            // .AddAzureQueueStorage(builder.Configuration.GetConnectionString("QueueStorage")!) // Azure Queue Storage (requires AspNetCore.HealthChecks.AzureStorage)
+            // .AddAzureKeyVault(new Uri(builder.Configuration["KeyVault:Uri"]!), new DefaultAzureCredential(), options => { }) // Azure Key Vault (requires AspNetCore.HealthChecks.AzureKeyVault)
+            // .AddUrlGroup(new Uri("https://external-service/health"), "external-service")    // External HTTP dependency reachability
+            // .AddProcessAllocatedMemoryHealthCheck(512);                                     // Fails if process exceeds 512 MB allocated memory
+        }
+
+        public void RegisterProblemDetails()
+        {
+            builder.Services.AddProblemDetails();
         }
 
         public void RegisterValidation()

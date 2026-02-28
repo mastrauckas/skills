@@ -19,7 +19,12 @@ public static class AppConfigurationExtensions
             // Authentication establishes who the user is; authorization uses that identity.
             app.UseAuthentication();
             app.UseAuthorization();
+
+            // Uncomment to enable rate limiting (must also enable in RegisterRateLimiting):
+            app.UseRateLimiter();
+
             app.MapOpenApi();
+            app.MapHealthChecks("/health");
 
             // Feature endpoints
             app.ConfigureHttpRoutes();
