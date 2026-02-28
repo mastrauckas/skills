@@ -1,5 +1,3 @@
-using Api.Configuration;
-
 var builder = WebApplication.CreateBuilder(args);
 builder.RegisterOpenApi();
 builder.RegisterAuthentication();

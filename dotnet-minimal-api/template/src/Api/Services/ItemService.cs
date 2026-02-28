@@ -1,9 +1,6 @@
-using Api.Models;
-using Microsoft.Extensions.DependencyInjection;
-
 namespace Api.Services;
 
-public class ItemService : IItemService
+public class ItemService: IItemService
 {
     private static readonly List<Item> _items = new()
     {

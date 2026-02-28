@@ -1,5 +1,3 @@
-using Api.Endpoints;
-
 namespace Api.Configuration;
 
 public static class AppConfigurationExtensions

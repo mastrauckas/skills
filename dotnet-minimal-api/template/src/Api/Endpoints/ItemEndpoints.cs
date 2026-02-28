@@ -1,7 +1,3 @@
-using Api.Models;
-using Api.Services;
-using Microsoft.AspNetCore.Http.HttpResults;
-
 namespace Api.Endpoints;
 
 public static class ItemEndpointExtensions

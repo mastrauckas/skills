@@ -1,5 +1,3 @@
-using Api.Services;
-
 namespace Api.Configuration;
 
 public static class BuilderConfigurationExtensions
