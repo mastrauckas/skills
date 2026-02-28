@@ -12,6 +12,7 @@ public static class BuilderConfigurationExtensions
             builder.RegisterRateLimiting();
             builder.RegisterHealthChecks();
             builder.RegisterProblemDetails();
+            builder.RegisterLogging();
             builder.RegisterDatabase();
             builder.RegisterValidation();
             builder.RegisterServices();
@@ -96,6 +97,49 @@ public static class BuilderConfigurationExtensions
         public void RegisterValidation() => builder.Services.AddValidation();
 
         // ---- Customize these for your application ----
+
+        public void RegisterLogging()
+        {
+            // Serilog is configured via the "Serilog" section in appsettings.json.
+            // Active sinks: Console + File (rolling daily, 10-day retention).
+            // To add more sinks, install the NuGet package and add to "Using" + "WriteTo" in appsettings.json:
+            //
+            // Seq (local structured log server — great for development):
+            //   Package : Serilog.Sinks.Seq
+            //   WriteTo : { "Name": "Seq", "Args": { "serverUrl": "http://localhost:5341" } }
+            //
+            // Azure Application Insights:
+            //   Package : Serilog.Sinks.ApplicationInsights
+            //   WriteTo : { "Name": "ApplicationInsights", "Args": { "connectionString": "<connection-string>", "telemetryConverter": "Serilog.Sinks.ApplicationInsights.TelemetryConverters.TraceTelemetryConverter, Serilog.Sinks.ApplicationInsights" } }
+            //
+            // Azure Blob Storage:
+            //   Package : Serilog.Sinks.AzureBlobStorage
+            //   WriteTo : { "Name": "AzureBlobStorage", "Args": { "connectionString": "<connection-string>", "storageContainerName": "logs", "storageFileName": "api-.log" } }
+            //
+            // Azure Cosmos DB:
+            //   Package : Serilog.Sinks.AzureCosmosDB
+            //   WriteTo : { "Name": "AzureCosmosDB", "Args": { "endpointUri": "<endpoint>", "authorizationKey": "<key>" } }
+            //
+            // Elasticsearch / Kibana (ELK stack):
+            //   Package : Serilog.Sinks.Elasticsearch
+            //   WriteTo : { "Name": "Elasticsearch", "Args": { "nodeUris": "http://localhost:9200", "indexFormat": "api-{0:yyyy.MM.dd}" } }
+            //
+            // Grafana Loki:
+            //   Package : Serilog.Sinks.Grafana.Loki
+            //   WriteTo : { "Name": "GrafanaLoki", "Args": { "uri": "http://localhost:3100" } }
+            //
+            // Datadog:
+            //   Package : Serilog.Sinks.Datadog.Logs
+            //   WriteTo : { "Name": "DatadogLogs", "Args": { "apiKey": "<api-key>" } }
+            //
+            // SQL Server:
+            //   Package : Serilog.Sinks.MSSqlServer
+            //   WriteTo : { "Name": "MSSqlServer", "Args": { "connectionString": "<connection-string>", "tableName": "Logs", "autoCreateSqlTable": true } }
+            //
+            // MongoDB:
+            //   Package : Serilog.Sinks.MongoDB
+            //   WriteTo : { "Name": "MongoDB", "Args": { "databaseUrl": "<connection-string>", "collectionName": "logs" } }
+        }
 
         public void RegisterDatabase()
         {
