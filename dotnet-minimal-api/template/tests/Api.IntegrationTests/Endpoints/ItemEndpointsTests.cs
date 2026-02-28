@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using Api.Dtos;
 using Microsoft.AspNetCore.Mvc.Testing;
 
-namespace Api.Tests.Endpoints;
+namespace Api.IntegrationTests.Endpoints;
 
 public class ItemEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
 {
@@ -62,7 +62,7 @@ public class ItemEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
     public async Task CreateItem_WithValidRequest_ReturnsCreatedWithItem()
     {
         // Arrange
-        var request = new { name = "New ItemDto", description = "A new ItemDto" };
+        var request = new { name = "New item", description = "A new item" };
 
         // Act
         var response = await _client.PostAsJsonAsync("/api/items", request);
@@ -71,15 +71,28 @@ public class ItemEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         var ItemDto = await response.Content.ReadFromJsonAsync<ItemDto>();
         Assert.NotNull(ItemDto);
-        Assert.Equal("New ItemDto", ItemDto.Name);
-        Assert.Equal("A new ItemDto", ItemDto.Description);
+        Assert.Equal("New item", ItemDto.Name);
+        Assert.Equal("A new item", ItemDto.Description);
     }
 
     [Fact]
     public async Task CreateItem_WithoutName_ReturnsBadRequest()
     {
         // Arrange
-        var request = new { name = "", description = "A new ItemDto" };
+        var request = new { name = "", description = "A new item" };
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/items", request);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateItem_WithoutDescription_ReturnsBadRequest()
+    {
+        // Arrange
+        var request = new { name = "New item", description = "" };
 
         // Act
         var response = await _client.PostAsJsonAsync("/api/items", request);
@@ -100,7 +113,7 @@ public class ItemEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
             return;
 
         // Arrange
-        var request = new { name = "Updated ItemDto", description = "Updated description" };
+        var request = new { name = "Updated item", description = "Updated description" };
 
         // Act
         var response = await _client.PutAsJsonAsync($"/api/items/{itemId}", request);
@@ -109,7 +122,7 @@ public class ItemEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var ItemDto = await response.Content.ReadFromJsonAsync<ItemDto>();
         Assert.NotNull(ItemDto);
-        Assert.Equal("Updated ItemDto", ItemDto.Name);
+        Assert.Equal("Updated item", ItemDto.Name);
         Assert.Equal("Updated description", ItemDto.Description);
     }
 
@@ -117,7 +130,7 @@ public class ItemEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
     public async Task UpdateItem_WithInvalidId_ReturnsNotFound()
     {
         // Arrange
-        var request = new { name = "Updated ItemDto", description = "Updated description" };
+        var request = new { name = "Updated item", description = "Updated description" };
 
         // Act
         var response = await _client.PutAsJsonAsync("/api/items/999", request);
