@@ -6,24 +6,17 @@ public static class AppConfigurationExtensions
     {
         public void ConfigureApp()
         {
-            app.UseExceptionHandler(exceptionApp =>
-                exceptionApp.Run(async context =>
-                {
-                    context.Response.ContentType = "application/json";
-                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            app.UseMiddleware<ExceptionMiddleware>();
 
-                    var problemDetails = new
-                    {
-                        type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
-                        title = "An error occurred while processing your request.",
-                        status = StatusCodes.Status500InternalServerError,
-                        traceId = context.TraceIdentifier
-                    };
+            // ORDER MATTERS: UseCors must come before UseAuthentication/UseAuthorization
+            // so CORS preflight requests are handled before auth middleware runs.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseCors("AllowLocalAngularDevelopment");
+            }
 
-                    await context.Response.WriteAsJsonAsync(problemDetails);
-                }));
-
-            app.UseCors("AllowLocalAngularDevelopment");
+            // ORDER MATTERS: UseAuthentication must come before UseAuthorization.
+            // Authentication establishes who the user is; authorization uses that identity.
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapOpenApi();

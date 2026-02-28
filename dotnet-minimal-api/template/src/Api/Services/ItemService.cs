@@ -28,7 +28,9 @@ public class ItemService: IItemService
         return Task.FromResult(newItem);
     }
 
-    public Task<Item?> UpdateAsync(int id, Item item)
+    public Task<Item?> UpdateAsync(
+        int id,
+        Item item)
     {
         var existingItem = _items.FirstOrDefault(x => x.Id == id);
         if (existingItem is null)

@@ -48,7 +48,9 @@ public static class ItemEndpointExtensions
         return TypedResults.Ok(items);
     }
 
-    private static async Task<Results<Ok<Item>, NotFound>> GetItemById(int id, IItemService service)
+    private static async Task<Results<Ok<Item>, NotFound>> GetItemById(
+        int id,
+        IItemService service)
     {
         var item = await service.GetByIdAsync(id);
         return item is null
@@ -56,29 +58,20 @@ public static class ItemEndpointExtensions
             : TypedResults.Ok(item);
     }
 
-    private static async Task<Results<Created<Item>, BadRequest<string>>> CreateItem(
-        CreateItemRequest request, IItemService service)
+    private static async Task<Created<Item>> CreateItem(
+        CreateItemRequest request,
+        IItemService service)
     {
-        if (string.IsNullOrWhiteSpace(request.Name))
-            return TypedResults.BadRequest("Name is required.");
-
-        if (string.IsNullOrWhiteSpace(request.Description))
-            return TypedResults.BadRequest("Description is required.");
-
         var item = new Item(0, request.Name, request.Description);
         var created = await service.CreateAsync(item);
         return TypedResults.Created($"/items/{created.Id}", created);
     }
 
-    private static async Task<Results<Ok<Item>, NotFound, BadRequest<string>>> UpdateItem(
-        int id, UpdateItemRequest request, IItemService service)
+    private static async Task<Results<Ok<Item>, NotFound>> UpdateItem(
+        int id,
+        UpdateItemRequest request,
+        IItemService service)
     {
-        if (string.IsNullOrWhiteSpace(request.Name))
-            return TypedResults.BadRequest("Name is required.");
-
-        if (string.IsNullOrWhiteSpace(request.Description))
-            return TypedResults.BadRequest("Description is required.");
-
         var item = new Item(0, request.Name, request.Description);
         var updated = await service.UpdateAsync(id, item);
         return updated is null
@@ -86,7 +79,9 @@ public static class ItemEndpointExtensions
             : TypedResults.Ok(updated);
     }
 
-    private static async Task<Results<NoContent, NotFound>> DeleteItem(int id, IItemService service)
+    private static async Task<Results<NoContent, NotFound>> DeleteItem(
+        int id,
+        IItemService service)
     {
         var deleted = await service.DeleteAsync(id);
         return deleted
@@ -95,6 +90,11 @@ public static class ItemEndpointExtensions
     }
 }
 
-public record CreateItemRequest(string Name, string Description);
-public record UpdateItemRequest(string Name, string Description);
+public record CreateItemRequest(
+    [Required] string Name,
+    [Required] string Description);
+
+public record UpdateItemRequest(
+    [Required] string Name,
+    [Required] string Description);
 

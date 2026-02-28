@@ -1,5 +1,8 @@
+global using System.ComponentModel.DataAnnotations;
 global using Api.Configuration;
 global using Api.Endpoints;
+global using Api.Logging;
+global using Api.Middleware;
 global using Api.Models;
 global using Api.Services;
 global using Microsoft.AspNetCore.Http.HttpResults;

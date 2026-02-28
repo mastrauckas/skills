@@ -9,6 +9,7 @@ public static class BuilderConfigurationExtensions
             builder.RegisterOpenApi();
             builder.RegisterAuthentication();
             builder.RegisterCors();
+            builder.RegisterValidation();
             builder.RegisterServices();
         }
 
@@ -39,6 +40,11 @@ public static class BuilderConfigurationExtensions
                         .AllowCredentials();
                 });
             });
+        }
+
+        public void RegisterValidation()
+        {
+            builder.Services.AddValidation();
         }
 
         public void RegisterServices()
