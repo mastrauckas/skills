@@ -6,6 +6,9 @@ public static class AppConfigurationExtensions
     {
         public void ConfigureApp()
         {
+            // Must be first — rewrites HttpContext with real client IP and scheme from proxy headers
+            app.UseForwardedHeaders();
+
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseSerilogRequestLogging();
 

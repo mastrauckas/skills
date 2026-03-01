@@ -1,4 +1,5 @@
 global using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+global using Microsoft.AspNetCore.HttpOverrides;
 global using Microsoft.AspNetCore.Http.HttpResults;
 global using Microsoft.AspNetCore.RateLimiting;
 global using Microsoft.Extensions.DependencyInjection;
