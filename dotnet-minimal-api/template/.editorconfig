@@ -45,6 +45,10 @@ dotnet_style_predefined_type_for_member_access = true:warning
 dotnet_style_object_initializer = true:warning
 dotnet_style_collection_initializer = true:warning
 
+# Meziantou rules — note: no rule exists to enforce global-only usings
+# MA0074 fires on xunit's Assert.Contains(string, string), which has no StringComparison overload — suppress
+dotnet_diagnostic.MA0074.severity = none
+
 [*.{json,yml,yaml}]
 indent_size = 2
 
