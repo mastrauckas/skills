@@ -16,14 +16,14 @@ automatically when your prompt matches, or you can invoke it directly by name.
 
 Clone this repo into a named subdirectory under your Copilot CLI skills directory:
 
-```powershell
-git clone git@github.com:mastrauckas/ai.git "$HOME\.copilot\skills\mastrauckas-ai"
+```sh
+git clone git@github.com:mastrauckas/ai.git "$HOME/.copilot/skills/mastrauckas-ai"
 ```
 
 For Claude Code, clone it into the Claude skills directory as well:
 
-```powershell
-git clone git@github.com:mastrauckas/ai.git "$HOME\.claude\skills\mastrauckas-ai"
+```sh
+git clone git@github.com:mastrauckas/ai.git "$HOME/.claude/skills/mastrauckas-ai"
 ```
 
 Then reload skills in Copilot CLI without restarting:
