@@ -6,7 +6,7 @@ description:
 user-invocable: true
 argument-hint: "create a new .NET Minimal API project"
 metadata:
-  version: 1.0.2
+  version: 1.0.3
   author: Michael Astrauckas
   tags: dotnet, minimal-api, csharp
   created: "2026-02-28"
@@ -42,6 +42,11 @@ Once you have the answers:
 - Update all namespace references from `MyMinimalWebApp.Api` → `<ProjectName>` throughout all `.cs`
   files
 - Update all project references in the `.slnx` file
+- Update the `InternalsVisibleTo` in `src/<ProjectName>/<ProjectName>.csproj` from
+  `MyMinimalWebApp.Api.IntegrationTests` → `<ProjectName>.IntegrationTests`
+- Rename `tests/MyMinimalWebApp.Api.IntegrationTests/` → `tests/<ProjectName>.IntegrationTests/`
+- Rename `tests/MyMinimalWebApp.Api.UnitTests/` → `tests/<ProjectName>.UnitTests/`
+- Update all namespace references in test projects from `MyMinimalWebApp.Api` → `<ProjectName>`
 - Replace `Item`/`Items` with the appropriate domain entity name if provided
 
 ## Template
@@ -52,7 +57,7 @@ replacing `Item`/`Items` with the appropriate domain entity name.
 
 ```
 template/
-  Api.slnx                                  ← solution with src/, tests/, http-files/ folders
+  MyMinimalWebApp.slnx                        ← solution with src/, tests/, http-files/ folders
   global.json                               ← pins .NET SDK version
   Directory.Build.props                     ← shared build properties (TreatWarningsAsErrors, EnforceCodeStyleInBuild)
   Directory.Packages.props                  ← Central Package Management (all NuGet versions here)
@@ -60,7 +65,7 @@ template/
   .editorconfig                             ← C# coding style rules at :warning severity
   .gitignore                                ← .NET gitignore (bin, obj, logs, TestResults)
   src/
-    Api/
+    MyMinimalWebApp.Api/
       Program.cs                            ← minimal: UseSerilog + ConfigureBuilder + ConfigureApp
       GlobalUsings.cs                       ← all global usings centralized here
       Configuration/
@@ -76,8 +81,6 @@ template/
         Log.cs                              ← [LoggerMessage] source-generated log methods
       Middleware/
         ExceptionMiddleware.cs              ← catches unhandled exceptions, returns ProblemDetails
-      Models/
-        Item.cs
       Services/
         IItemService.cs
         ItemService.cs
@@ -87,11 +90,12 @@ template/
       appsettings.Development.json          ← Debug log level override
       appsettings.Production.json           ← Warning log level override
   tests/
-    Api.IntegrationTests/
+    MyMinimalWebApp.Api.IntegrationTests/
       Endpoints/ItemEndpointsTests.cs       ← WebApplicationFactory<Program> integration tests
       HealthChecks/HealthCheckTests.cs      ← /health, /health/live, /health/ready tests
       Middleware/ExceptionMiddlewareTests.cs ← 500 + ProblemDetails test
-    Api.UnitTests/
+      Middleware/ThrowingAppFactory.cs      ← custom WebApplicationFactory for exception tests
+    MyMinimalWebApp.Api.UnitTests/
       Services/ItemServiceTests.cs          ← unit tests with Bogus test data
   http-files/
     items.http                              ← all CRUD requests
@@ -296,8 +300,8 @@ Server, MongoDB) are documented as comments in `RegisterLogging()` inside `Build
 
 Two test projects:
 
-- **`Api.IntegrationTests`** — `WebApplicationFactory<Program>`, tests HTTP endpoints and middleware
-- **`Api.UnitTests`** — tests service layer directly with Bogus for test data, NSubstitute for mocks
+- **`MyMinimalWebApp.Api.IntegrationTests`** — `WebApplicationFactory<Program>`, tests HTTP endpoints and middleware
+- **`MyMinimalWebApp.Api.UnitTests`** — tests service layer directly with Bogus for test data, NSubstitute for mocks
 
 `public partial class Program {}` at the bottom of `Program.cs` is required for
 `WebApplicationFactory<Program>`.

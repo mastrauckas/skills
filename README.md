@@ -10,20 +10,20 @@ automatically when your prompt matches, or you can invoke it directly by name.
 
 | Skill                                               | Description                                              |
 | --------------------------------------------------- | -------------------------------------------------------- |
-| [dotnet-minimal-api](./dotnet-minimal-api/SKILL.md) | Scaffold a production-ready .NET 10 Minimal API project. |
+| [dotnet-minimal-api](./skills/dotnet-minimal-api/SKILL.md) | Scaffold a production-ready .NET 10 Minimal API project. |
 
 ## Setup
 
-Clone this repo into your Copilot CLI skills directory:
+Clone this repo into a named subdirectory under your Copilot CLI skills directory:
 
-```powershell
-git clone git@github.com:mastrauckas/ai.git "$HOME\.copilot\skills"
+```sh
+git clone git@github.com:mastrauckas/ai.git "$HOME/.copilot/skills/mastrauckas-ai"
 ```
 
 For Claude Code, clone it into the Claude skills directory as well:
 
-```powershell
-git clone git@github.com:mastrauckas/ai.git "$HOME\.claude\skills"
+```sh
+git clone git@github.com:mastrauckas/ai.git "$HOME/.claude/skills/mastrauckas-ai"
 ```
 
 Then reload skills in Copilot CLI without restarting:
@@ -46,8 +46,8 @@ Use the /dotnet-minimal-api skill to scaffold a new orders API
 
 ## Adding a New Skill
 
-1. Create a directory: `mkdir my-skill-name`
-2. Add `my-skill-name/SKILL.md` with YAML frontmatter and instructions
+1. Create a directory under `skills/`: `mkdir skills/my-skill-name`
+2. Add `skills/my-skill-name/SKILL.md` with YAML frontmatter and instructions
 3. Commit and push
 4. Run `/skills reload` in Copilot CLI
 
