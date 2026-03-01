@@ -53,3 +53,28 @@ jobs:
           recreate: true
           path: code-coverage-results.md
 
+  stamp-commit-hash:
+    name: Stamp Commit Hash
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Replace commit hash token in SKILL.md
+        run: |
+          sed -i "s/{{COMMIT_HASH}}/${{ github.sha }}/g" skills/dotnet-minimal-api/SKILL.md
+
+      - name: Commit stamped SKILL.md
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add skills/dotnet-minimal-api/SKILL.md
+          git diff --cached --quiet || git commit -m "chore: stamp commit hash in SKILL.md [skip ci]"
+          git push
+
