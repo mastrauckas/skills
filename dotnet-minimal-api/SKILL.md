@@ -6,12 +6,20 @@ description:
 user-invocable: true
 argument-hint: "create a new .NET Minimal API project"
 metadata:
-  version: 1.0.1
+  version: 1.0.2
   author: Michael Astrauckas
   tags: dotnet, minimal-api, csharp
   created: "2026-02-28"
   dotnet-version: "10.0"
 ---
+
+## Quick Start
+
+1. Ask for the **solution name** and **project name** (see [Scaffolding](#scaffolding-a-new-project))
+2. Copy `template/` into the output directory
+3. Rename files and namespaces from `MyMinimalWebApp.Api` → `<ProjectName>`
+4. Replace `Item`/`Items` with your domain entity name
+5. Run `dotnet test` to verify everything passes
 
 ## Scaffolding a New Project
 

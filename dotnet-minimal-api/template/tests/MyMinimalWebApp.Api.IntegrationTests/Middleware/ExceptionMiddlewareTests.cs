@@ -1,9 +1,4 @@
-using System.Net;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Builder;
-
-namespace Api.IntegrationTests.Middleware;
+namespace MyMinimalWebApp.Api.IntegrationTests.Middleware;
 
 public class ExceptionMiddlewareTests : IClassFixture<ThrowingAppFactory>
 {
@@ -25,18 +20,5 @@ public class ExceptionMiddlewareTests : IClassFixture<ThrowingAppFactory>
         string body = await response.Content.ReadAsStringAsync();
         Assert.Contains("An error occurred while processing your request.", body);
         Assert.Contains("500", body);
-    }
-}
-
-public class ThrowingAppFactory : WebApplicationFactory<Program>
-{
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
-    {
-        builder.Configure(app =>
-        {
-            app.UseMiddleware<MyMinimalWebApp.Api.Middleware.ExceptionMiddleware>();
-            app.Map("/throw", throwApp =>
-                throwApp.Run(_ => throw new InvalidOperationException("Test unhandled exception")));
-        });
     }
 }

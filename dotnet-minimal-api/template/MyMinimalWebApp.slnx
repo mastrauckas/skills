@@ -3,8 +3,8 @@
     <Project Path="src/MyMinimalWebApp.Api/MyMinimalWebApp.Api.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/Api.IntegrationTests/Api.IntegrationTests.csproj" />
-    <Project Path="tests/Api.UnitTests/Api.UnitTests.csproj" />
+    <Project Path="tests/MyMinimalWebApp.Api.IntegrationTests/MyMinimalWebApp.Api.IntegrationTests.csproj" />
+    <Project Path="tests/MyMinimalWebApp.Api.UnitTests/MyMinimalWebApp.Api.UnitTests.csproj" />
   </Folder>
   <Folder Name="/http-files/">
     <File Path="http-files/items.http" />

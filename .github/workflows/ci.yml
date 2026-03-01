@@ -34,7 +34,7 @@ jobs:
       - name: Coverage summary
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: dotnet-minimal-api/template/**/coverage.cobertura.xml
+          filename: dotnet-minimal-api/template/tests/MyMinimalWebApp.Api.IntegrationTests/**/coverage.cobertura.xml
           badge: true
           fail_below_min: true
           format: markdown

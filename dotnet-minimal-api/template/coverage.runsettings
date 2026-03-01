@@ -6,7 +6,7 @@
         <Configuration>
           <ExcludeByAttribute>GeneratedCodeAttribute,ExcludeFromCodeCoverageAttribute</ExcludeByAttribute>
           <ExcludeByFile>**/*.g.cs,**/*.generated.cs</ExcludeByFile>
-          <Exclude>[*.Generated]*,[System.Runtime.CompilerServices]*</Exclude>
+          <Exclude>[*.Generated]*,[System.Runtime.CompilerServices]*,[*.Tests]*,[*.UnitTests]*,[*.IntegrationTests]*,[MyMinimalWebApp.Api.UnitTests]*,[MyMinimalWebApp.Api.IntegrationTests]*</Exclude>
         </Configuration>
       </DataCollector>
     </DataCollectors>
