@@ -1,7 +1,3 @@
-using System.Net;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Builder;
-
 namespace MyMinimalWebApp.Api.IntegrationTests.Middleware;
 
 public class ExceptionMiddlewareTests : IClassFixture<ThrowingAppFactory>

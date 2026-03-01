@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Builder;
-
 namespace MyMinimalWebApp.Api.IntegrationTests.Middleware;
 
 public class ThrowingAppFactory : WebApplicationFactory<Program>

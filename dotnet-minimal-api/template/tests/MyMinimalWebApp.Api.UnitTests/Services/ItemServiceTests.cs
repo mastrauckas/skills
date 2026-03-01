@@ -1,6 +1,3 @@
-using MyMinimalWebApp.Api.Services;
-using Bogus;
-
 namespace MyMinimalWebApp.Api.UnitTests.Services;
 
 public class ItemServiceTests

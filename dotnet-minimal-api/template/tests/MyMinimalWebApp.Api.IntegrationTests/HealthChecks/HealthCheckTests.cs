@@ -1,5 +1,3 @@
-using System.Net;
-
 namespace MyMinimalWebApp.Api.IntegrationTests.HealthChecks;
 
 public class HealthCheckTests(WebApplicationFactory<Program> factory)

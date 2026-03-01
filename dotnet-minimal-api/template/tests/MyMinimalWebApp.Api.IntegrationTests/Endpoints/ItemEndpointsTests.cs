@@ -1,6 +1,3 @@
-using System.Net;
-using System.Net.Http.Json;
-
 namespace MyMinimalWebApp.Api.IntegrationTests.Endpoints;
 
 public class ItemEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
