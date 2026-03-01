@@ -6,8 +6,17 @@ public static class AppConfigurationExtensions
     {
         public void ConfigureApp()
         {
+            // Must be first — rewrites HttpContext with real client IP and scheme from proxy headers
+            app.UseForwardedHeaders();
+
             app.UseMiddleware<ExceptionMiddleware>();
-            app.UseSerilogRequestLogging();
+            app.UseSerilogRequestLogging(options =>
+            {
+                options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+                {
+                    diagnosticContext.Set("ClientIp", httpContext.Connection.RemoteIpAddress);
+                };
+            });
 
             // ORDER MATTERS: UseCors must come before UseAuthentication/UseAuthorization
             // so CORS preflight requests are handled before auth middleware runs.

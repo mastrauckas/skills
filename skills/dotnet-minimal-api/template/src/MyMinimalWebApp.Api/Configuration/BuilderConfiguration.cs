@@ -12,6 +12,7 @@ public static class BuilderConfigurationExtensions
             builder.RegisterRateLimiting();
             builder.RegisterHealthChecks();
             builder.RegisterProblemDetails();
+            builder.RegisterForwardedHeaders();
             builder.RegisterLogging();
             builder.RegisterDatabase();
             builder.RegisterValidation();
@@ -93,6 +94,16 @@ public static class BuilderConfigurationExtensions
         }
 
         public void RegisterProblemDetails() => builder.Services.AddProblemDetails();
+
+        public void RegisterForwardedHeaders()
+        {
+            builder.Services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                // Restrict to known proxy networks in production for security.
+                // By default, only loopback proxies are trusted.
+            });
+        }
 
         public void RegisterValidation() => builder.Services.AddValidation();
 

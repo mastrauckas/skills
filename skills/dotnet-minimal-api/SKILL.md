@@ -6,7 +6,7 @@ description:
 user-invocable: true
 argument-hint: "create a new .NET Minimal API project"
 metadata:
-  version: 1.0.6
+  version: 1.0.7
   author: Michael Astrauckas
   tags: dotnet, minimal-api, csharp
   created: "2026-02-28"
@@ -30,6 +30,16 @@ When asked to create a new project, **ask the user the following questions befor
    `<SolutionName>.Api`)
 3. **Output directory** — where should the project be created? (defaults to the current working
    directory)
+4. **HTTP port** — generate a random port in the range 8000–8999 by running the appropriate command
+   for the user's platform:
+   - **Windows**: `Get-Random -Minimum 8000 -Maximum 8999`
+   - **Linux**: `shuf -i 8000-8999 -n 1`
+   - **macOS**: `jot -r 1 8000 8999`
+   - **Fallback** (any platform): `python3 -c "import random; print(random.randint(8000, 8999))"` or
+     `node -e "console.log(Math.floor(Math.random()*1000)+8000)"`
+
+   Present the generated port as a choice alongside a freeform option so the user can accept or
+   enter their own. Example prompt: *"Suggested HTTP port: 8432. Use this or enter your own."*
 
 Once you have the answers:
 
@@ -48,6 +58,11 @@ Once you have the answers:
 - Rename `tests/MyMinimalWebApp.Api.UnitTests/` → `tests/<ProjectName>.UnitTests/`
 - Update all namespace references in test projects from `MyMinimalWebApp.Api` → `<ProjectName>`
 - Replace `Item`/`Items` with the appropriate domain entity name if provided
+- Replace the HTTP port `5262` with `<HttpPort>` and the HTTPS port `7105` with `<HttpPort + 1>` in:
+  - `src/<ProjectName>/Properties/launchSettings.json` (both `http` and `https` profiles)
+  - `src/<ProjectName>/appsettings.json` (both `Kestrel.Endpoints.Http.Url` and `Kestrel.Endpoints.Https.Url`)
+  - `http-files/items.http`
+  - `http-files/health.http`
 
 ## Template
 
@@ -86,8 +101,8 @@ template/
         ItemService.cs
       Properties/
         launchSettings.json                 ← Kestrel profiles, launchBrowser: false
-      appsettings.json                      ← Serilog, Cors, ConnectionStrings, Auth, KeyVault
-      appsettings.Development.json          ← Debug log level override
+      appsettings.json                      ← Serilog, Kestrel, Cors, ConnectionStrings, Auth, KeyVault
+      appsettings.Development.json          ← DetailedErrors, Debug log level override
       appsettings.Production.json           ← Warning log level override
   tests/
     MyMinimalWebApp.Api.IntegrationTests/
