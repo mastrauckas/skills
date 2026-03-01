@@ -47,7 +47,7 @@ public static class BuilderConfigurationExtensions
 
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowLocalAngularDevelopment", policy =>
+                options.AddPolicy("AllowLocalDevelopment", policy =>
                 {
                     policy.WithOrigins(allowedOrigins)
                         .AllowAnyHeader()
@@ -100,8 +100,13 @@ public static class BuilderConfigurationExtensions
             builder.Services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-                // Restrict to known proxy networks in production for security.
-                // By default, only loopback proxies are trusted.
+
+                // Uncomment the lines below when running in a trusted network (e.g., Kubernetes cluster)
+                // where all proxies are known. By default only loopback proxies are trusted, which is
+                // the safe default for internet-facing apps. Clearing these allows any proxy to forward
+                // headers — only do this when your ingress is the sole entry point.
+                // options.KnownNetworks.Clear();
+                // options.KnownProxies.Clear();
             });
         }
 
