@@ -1,0 +1,31 @@
+@baseUrl = http://localhost:5262
+@contentType = application/json
+
+### List all items
+GET {{baseUrl}}/api/items
+Accept: {{contentType}}
+
+### Get item by ID
+GET {{baseUrl}}/api/items/1
+Accept: {{contentType}}
+
+### Create item
+POST {{baseUrl}}/api/items
+Content-Type: {{contentType}}
+
+{
+  "name": "New Item",
+  "description": "A brand new item"
+}
+
+### Update item
+PUT {{baseUrl}}/api/items/1
+Content-Type: {{contentType}}
+
+{
+  "name": "Updated Item",
+  "description": "An updated item"
+}
+
+### Delete item
+DELETE {{baseUrl}}/api/items/1
