@@ -24,11 +24,13 @@ For Claude Code, clone it into the Claude skills directory as well:
 git clone git@github.com:mastrauckas/skills.git "$HOME\.claude\skills"
 ```
 
-Then reload skills without restarting:
+Then reload skills in Copilot CLI without restarting:
 
 ```
 /skills reload
 ```
+
+> **Note:** `/skills reload` is a GitHub Copilot CLI command. Claude Code picks up skills automatically on restart.
 
 ## Usage
 
