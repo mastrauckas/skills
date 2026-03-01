@@ -6,7 +6,7 @@ description:
 user-invocable: true
 argument-hint: "create a new .NET Minimal API project"
 metadata:
-  version: 1.0.5
+  version: 1.0.6
   author: Michael Astrauckas
   tags: dotnet, minimal-api, csharp
   created: "2026-02-28"
@@ -95,8 +95,10 @@ template/
       HealthChecks/HealthCheckTests.cs      ← /health, /health/live, /health/ready tests
       Middleware/ExceptionMiddlewareTests.cs ← 500 + ProblemDetails test
       Middleware/ThrowingAppFactory.cs      ← custom WebApplicationFactory for exception tests
+      GlobalUsings.cs                       ← all global usings centralized here
     MyMinimalWebApp.Api.UnitTests/
       Services/ItemServiceTests.cs          ← unit tests with Bogus test data
+      GlobalUsings.cs                       ← all global usings centralized here
   http-files/
     items.http                              ← all CRUD requests
     health.http                             ← health check requests
