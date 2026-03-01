@@ -1,36 +1,52 @@
 # skills
 
-Personal Copilot CLI skills for [@mastrauckas](https://github.com/mastrauckas).
+Personal [GitHub Copilot CLI](https://docs.github.com/copilot/concepts/agents/about-copilot-cli) skills by [Michael Astrauckas](https://github.com/mastrauckas).
 
-## Setup
-
-Clone this repo directly into your Copilot skills directory:
-
-```powershell
-git clone git@github.com:mastrauckas/skills.git "$HOME\.copilot\skills"
-```
-
-Then in Copilot CLI, run `/skills reload` to pick up any new skills.
+A skill is a `SKILL.md` file that tells Copilot how to perform a specialized task — scaffolding a project, debugging a workflow, or following a set of conventions. Copilot loads the skill automatically when your prompt matches, or you can invoke it directly by name.
 
 ## Available Skills
 
 | Skill | Description |
 |-------|-------------|
-| [dotnet-minimal-api](./dotnet-minimal-api/SKILL.md) | Best practices for creating .NET Minimal API projects |
+| [dotnet-minimal-api](./dotnet-minimal-api/SKILL.md) | Scaffold a production-ready .NET Minimal API project following established patterns for structure, logging, health checks, rate limiting, and testing. |
+
+## Setup
+
+Clone this repo into your Copilot CLI skills directory:
+
+```powershell
+git clone git@github.com:mastrauckas/skills.git "$HOME\.copilot\skills"
+```
+
+For Claude Code, clone it into the Claude skills directory as well:
+
+```powershell
+git clone git@github.com:mastrauckas/skills.git "$HOME\.claude\skills"
+```
+
+Then reload skills without restarting:
+
+```
+/skills reload
+```
 
 ## Usage
 
-Invoke a skill explicitly in your prompt:
+Copilot selects a skill automatically when your prompt matches its description. To invoke one directly, name it in your prompt:
 
 ```
-Use the /dotnet-minimal-api skill to scaffold a new products API
+Use the /dotnet-minimal-api skill to scaffold a new orders API
 ```
-
-Or just describe the task and Copilot will load the skill automatically when relevant.
 
 ## Adding a New Skill
 
-1. Create a new directory: `mkdir skill-name`
-2. Create `skill-name/SKILL.md` with YAML frontmatter + instructions
+1. Create a directory: `mkdir my-skill-name`
+2. Add `my-skill-name/SKILL.md` with YAML frontmatter and instructions
 3. Commit and push
 4. Run `/skills reload` in Copilot CLI
+
+See the [GitHub Copilot CLI skills documentation](https://docs.github.com/copilot/how-tos/copilot-cli/customize-copilot/create-skills) for the full `SKILL.md` format reference.
+
+## License
+
+MIT — see [LICENSE](./LICENSE).
