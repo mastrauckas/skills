@@ -15,13 +15,13 @@ A skill is a `SKILL.md` file that tells Copilot how to perform a specialized tas
 Clone this repo into your Copilot CLI skills directory:
 
 ```powershell
-git clone git@github.com:mastrauckas/skills.git "$HOME\.copilot\skills"
+git clone git@github.com:mastrauckas/ai.git "$HOME\.copilot\skills"
 ```
 
 For Claude Code, clone it into the Claude skills directory as well:
 
 ```powershell
-git clone git@github.com:mastrauckas/skills.git "$HOME\.claude\skills"
+git clone git@github.com:mastrauckas/ai.git "$HOME\.claude\skills"
 ```
 
 Then reload skills in Copilot CLI without restarting:
