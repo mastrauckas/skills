@@ -68,7 +68,9 @@ jobs:
 
       - name: Replace commit hash token in SKILL.md
         run: |
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           sed -i "s/{{COMMIT_HASH}}/${{ github.sha }}/g" skills/dotnet-minimal-api/SKILL.md
+          sed -i "s/{{LAST_UPDATED}}/${TIMESTAMP}/g" skills/dotnet-minimal-api/SKILL.md
 
       - name: Commit stamped SKILL.md
         run: |
