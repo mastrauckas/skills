@@ -30,9 +30,16 @@ When asked to create a new project, **ask the user the following questions befor
    `<SolutionName>.Api`)
 3. **Output directory** — where should the project be created? (defaults to the current working
    directory)
-4. **HTTP port** — generate a random port in the range 8000–8999 and offer it as the suggestion.
-   Present it as a choice alongside a freeform option so the user can accept or enter their own.
-   Example prompt: *"Suggested HTTP port: 8432. Use this or enter your own."*
+4. **HTTP port** — generate a random port in the range 8000–8999 by running the appropriate command
+   for the user's platform:
+   - **Windows**: `Get-Random -Minimum 8000 -Maximum 8999`
+   - **Linux**: `shuf -i 8000-8999 -n 1`
+   - **macOS**: `jot -r 1 8000 8999`
+   - **Fallback** (any platform): `python3 -c "import random; print(random.randint(8000, 8999))"` or
+     `node -e "console.log(Math.floor(Math.random()*1000)+8000)"`
+
+   Present the generated port as a choice alongside a freeform option so the user can accept or
+   enter their own. Example prompt: *"Suggested HTTP port: 8432. Use this or enter your own."*
 
 Once you have the answers:
 
