@@ -101,8 +101,8 @@ template/
         ItemService.cs
       Properties/
         launchSettings.json                 ← Kestrel profiles, launchBrowser: false
-      appsettings.json                      ← Serilog, Cors, ConnectionStrings, Auth, KeyVault
-      appsettings.Development.json          ← Debug log level override
+      appsettings.json                      ← Serilog, Kestrel, Cors, ConnectionStrings, Auth, KeyVault
+      appsettings.Development.json          ← DetailedErrors, Debug log level override
       appsettings.Production.json           ← Warning log level override
   tests/
     MyMinimalWebApp.Api.IntegrationTests/
