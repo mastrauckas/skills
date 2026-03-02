@@ -6,7 +6,7 @@ description:
 user-invocable: true
 argument-hint: "create a new .NET Minimal API project"
 metadata:
-  version: 1.0.8
+  version: 1.0.9
   author: Michael Astrauckas
   source: https://github.com/mastrauckas/ai
   tags: dotnet, minimal-api, csharp
