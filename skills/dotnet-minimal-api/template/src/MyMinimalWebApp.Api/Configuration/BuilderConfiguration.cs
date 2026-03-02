@@ -125,6 +125,9 @@ public static class BuilderConfigurationExtensions
 
         public void RegisterLogging()
         {
+            builder.Host.UseSerilog((ctx, config) =>
+                config.ReadFrom.Configuration(ctx.Configuration));
+
             // Serilog is configured via the "Serilog" section in appsettings.json.
             // Active sinks: Console + File (rolling daily, 10-day retention).
             // To add more sinks, install the NuGet package and add to "Using" + "WriteTo" in appsettings.json:
