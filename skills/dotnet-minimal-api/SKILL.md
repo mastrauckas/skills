@@ -6,8 +6,11 @@ description:
 user-invocable: true
 argument-hint: "create a new .NET Minimal API project"
 metadata:
-  version: 1.0.7
+  version: 1.0.8
   author: Michael Astrauckas
+  source: https://github.com/mastrauckas/ai
+  commit: "{{COMMIT_HASH}}"
+  last-updated: "{{LAST_UPDATED}}"
   tags: dotnet, minimal-api, csharp
   created: "2026-02-28"
   dotnet-version: "10.0"
@@ -103,7 +106,8 @@ template/
         launchSettings.json                 ← Kestrel profiles, launchBrowser: false
       appsettings.json                      ← Serilog, Kestrel, Cors, ConnectionStrings, Auth, KeyVault
       appsettings.Development.json          ← DetailedErrors, Debug log level override
-      appsettings.Production.json           ← Warning log level override
+      appsettings.Staging.json              ← Warning log level, per-env placeholders
+      appsettings.Production.json           ← Warning log level, per-env placeholders
   tests/
     MyMinimalWebApp.Api.IntegrationTests/
       Endpoints/ItemEndpointsTests.cs       ← WebApplicationFactory<Program> integration tests

@@ -22,7 +22,7 @@ public static class AppConfigurationExtensions
             // so CORS preflight requests are handled before auth middleware runs.
             if (app.Environment.IsDevelopment())
             {
-                app.UseCors("AllowLocalAngularDevelopment");
+                app.UseCors("AllowLocalDevelopment");
             }
 
             // ORDER MATTERS: UseAuthentication must come before UseAuthorization.

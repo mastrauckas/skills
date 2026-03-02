@@ -47,7 +47,7 @@ public static class BuilderConfigurationExtensions
 
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowLocalAngularDevelopment", policy =>
+                options.AddPolicy("AllowLocalDevelopment", policy =>
                 {
                     policy.WithOrigins(allowedOrigins)
                         .AllowAnyHeader()
@@ -100,8 +100,22 @@ public static class BuilderConfigurationExtensions
             builder.Services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-                // Restrict to known proxy networks in production for security.
-                // By default, only loopback proxies are trusted.
+
+                // Uncomment the lines below when ALL of the following are true:
+                //   - Running behind a reverse proxy (nginx, Kubernetes ingress, AWS ALB, Azure Front Door)
+                //   - The proxy is the sole entry point (pods are not directly reachable from the internet)
+                //   - Traffic arrives from a non-loopback IP (e.g., Kubernetes ClusterIP, internal VPC address)
+                //
+                // Common scenarios:
+                //   - Kubernetes: ingress controller reaches pods via ClusterIP — not loopback, so headers
+                //     are ignored by default. Clearing these lets any in-cluster proxy forward headers.
+                //   - Docker Compose: nginx container forwards to app container via bridge network IP.
+                //   - Cloud load balancers: AWS ALB, Azure App Gateway, Cloudflare — all use non-loopback IPs.
+                //
+                // Do NOT uncomment if pods/containers are directly reachable from the internet —
+                // an attacker could spoof X-Forwarded-For to fake their IP.
+                // options.KnownNetworks.Clear();
+                // options.KnownProxies.Clear();
             });
         }
 
