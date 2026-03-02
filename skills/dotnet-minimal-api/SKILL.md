@@ -106,7 +106,8 @@ template/
         launchSettings.json                 ← Kestrel profiles, launchBrowser: false
       appsettings.json                      ← Serilog, Kestrel, Cors, ConnectionStrings, Auth, KeyVault
       appsettings.Development.json          ← DetailedErrors, Debug log level override
-      appsettings.Production.json           ← Warning log level override
+      appsettings.Staging.json              ← Warning log level, per-env placeholders
+      appsettings.Production.json           ← Warning log level, per-env placeholders
   tests/
     MyMinimalWebApp.Api.IntegrationTests/
       Endpoints/ItemEndpointsTests.cs       ← WebApplicationFactory<Program> integration tests
