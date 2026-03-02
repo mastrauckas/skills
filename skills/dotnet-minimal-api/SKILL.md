@@ -9,8 +9,6 @@ metadata:
   version: 1.0.8
   author: Michael Astrauckas
   source: https://github.com/mastrauckas/ai
-  commit: "{{COMMIT_HASH}}"
-  last-updated: "{{LAST_UPDATED}}"
   tags: dotnet, minimal-api, csharp
   created: "2026-02-28"
   dotnet-version: "10.0"
