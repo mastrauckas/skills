@@ -17,7 +17,7 @@
     <!-- NOTE: coverlet.collector 8.0.0 and Microsoft.NET.Test.Sdk 18.3.0 include DLLs blocked by Windows WDAC
          policy on some machines. Keep at 6.0.4 and 17.14.1 until the policy is updated. -->
     <PackageVersion Include="Bogus" Version="35.6.5" />
-    <PackageVersion Include="Meziantou.Analyzer" Version="3.0.18" />
+    <PackageVersion Include="Meziantou.Analyzer" Version="3.0.19" />
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
