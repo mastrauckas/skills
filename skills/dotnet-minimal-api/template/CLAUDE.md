@@ -12,8 +12,8 @@ Lines must never exceed 80 characters.
 Each class must be in its own file.
 Prefer primary constructors over traditional constructors.
 
-Each property/parameter must be on its own line, regardless
-of count:
+When declaring or calling with more than one parameter, each
+must be on its own line:
 
 ```csharp
 public record ItemDto(
