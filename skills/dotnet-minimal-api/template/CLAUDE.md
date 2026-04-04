@@ -2,10 +2,48 @@
 
 ## Language and Framework
 
-This project uses C# 14 and .NET 10. Always prefer features from these versions over older alternatives.
+This project uses C# 14 and .NET 10. Always prefer features
+from these versions over older alternatives.
 
 ## Code Style
 
 Always use extension blocks over extension methods.
 Lines must never exceed 80 characters.
 Each class must be in its own file.
+Prefer primary constructors over traditional constructors.
+
+Each property/parameter must be on its own line, regardless
+of count:
+
+```csharp
+public record ItemDto(
+    int Id,
+    string Name,
+    string Description);
+```
+
+For HTTP handler return types, expand generic type arguments
+onto separate indented lines:
+
+```csharp
+private static async Task<
+    Results<
+        Ok<ItemDto>,
+        NotFound>
+    > UpdateItem(
+```
+
+Method chaining is fine when each call is short and reads
+naturally. When chains are long, break each call onto its
+own line:
+
+```csharp
+var result = items
+    .Where(x => x.IsActive)
+    .OrderBy(x => x.Name)
+    .Select(x => new ItemDto(x.Id, x.Name));
+```
+
+## DTOs
+
+DTOs must be records and placed in the `Dtos` directory.
