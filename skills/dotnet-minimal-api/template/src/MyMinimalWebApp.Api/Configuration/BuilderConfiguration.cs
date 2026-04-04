@@ -40,7 +40,7 @@ public static class BuilderConfigurationExtensions
 
         public void RegisterCors()
         {
-            string[] allowedOrigins = builder
+            var allowedOrigins = builder
                 .Configuration
                 .GetSection("Cors:AllowedOrigins")
                 .Get<string[]>() ?? [];

@@ -15,7 +15,7 @@ public class ItemService : IItemService
 
     public Task<ItemDto?> GetByIdAsync(int id)
     {
-        ItemDto? item = _items.FirstOrDefault(x => x.Id == id);
+        var item = _items.FirstOrDefault(x => x.Id == id);
         return Task.FromResult(item);
     }
 
@@ -30,9 +30,11 @@ public class ItemService : IItemService
         int id,
         ItemDto item)
     {
-        int index = _items.FindIndex(x => x.Id == id);
+        var index = _items.FindIndex(x => x.Id == id);
         if (index < 0)
+        {
             return Task.FromResult<ItemDto?>(null);
+        }
 
         var updatedItem = new ItemDto(id, item.Name, item.Description);
         _items[index] = updatedItem;
@@ -41,9 +43,11 @@ public class ItemService : IItemService
 
     public Task<bool> DeleteAsync(int id)
     {
-        ItemDto? item = _items.FirstOrDefault(x => x.Id == id);
+        var item = _items.FirstOrDefault(x => x.Id == id);
         if (item is null)
+        {
             return Task.FromResult(false);
+        }
 
         _items.Remove(item);
         return Task.FromResult(true);

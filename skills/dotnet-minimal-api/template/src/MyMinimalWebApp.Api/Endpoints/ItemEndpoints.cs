@@ -6,7 +6,7 @@ public static class ItemEndpointExtensions
     {
         public void MapItemEndpoints(RouteGroupBuilder root)
         {
-            RouteGroupBuilder group = root
+            var group = root
                 .MapGroup("/items")
                 .WithTags("Items");
                 // Uncomment to require authentication for all endpoints in this group:
@@ -44,9 +44,10 @@ public static class ItemEndpointExtensions
         }
     }
 
+#pragma warning disable IDE0051
     private static async Task<Ok<IEnumerable<ItemDto>>> GetAllItems(IItemService service)
     {
-        IEnumerable<ItemDto> items = await service.GetAllAsync();
+        var items = await service.GetAllAsync();
         return TypedResults.Ok(items);
     }
 
@@ -54,7 +55,7 @@ public static class ItemEndpointExtensions
         int id,
         IItemService service)
     {
-        ItemDto? item = await service.GetByIdAsync(id);
+        var item = await service.GetByIdAsync(id);
         return item is null
             ? TypedResults.NotFound()
             : TypedResults.Ok(item);
@@ -65,7 +66,7 @@ public static class ItemEndpointExtensions
         IItemService service)
     {
         var item = new ItemDto(0, request.Name, request.Description);
-        ItemDto created = await service.CreateAsync(item);
+        var created = await service.CreateAsync(item);
         return TypedResults.Created($"/api/items/{created.Id}", created);
     }
 
@@ -75,7 +76,7 @@ public static class ItemEndpointExtensions
         IItemService service)
     {
         var item = new ItemDto(0, request.Name, request.Description);
-        ItemDto? updated = await service.UpdateAsync(id, item);
+        var updated = await service.UpdateAsync(id, item);
         return updated is null
             ? TypedResults.NotFound()
             : TypedResults.Ok(updated);
@@ -85,10 +86,11 @@ public static class ItemEndpointExtensions
         int id,
         IItemService service)
     {
-        bool deleted = await service.DeleteAsync(id);
+        var deleted = await service.DeleteAsync(id);
         return deleted
             ? TypedResults.NoContent()
             : TypedResults.NotFound();
     }
+#pragma warning restore IDE0051
 }
 
