@@ -2,18 +2,15 @@
 
 ## Language and Framework
 
-This project uses C# 14 and .NET 10. Always prefer features
-from these versions over older alternatives.
+This project uses C# 14 and .NET 10. Always prefer features from these versions over older
+alternatives.
 
 ## Code Style
 
-Always use extension blocks over extension methods.
-Lines must never exceed 80 characters.
-Each class must be in its own file.
-Prefer primary constructors over traditional constructors.
+Always use extension blocks over extension methods. Lines must never exceed 80 characters. Each
+class must be in its own file. Prefer primary constructors over traditional constructors.
 
-When declaring or calling with more than one parameter, each
-must be on its own line:
+When declaring or calling with more than one parameter, each must be on its own line:
 
 ```csharp
 public record ItemDto(
@@ -22,8 +19,7 @@ public record ItemDto(
     string Description);
 ```
 
-For HTTP handler return types, expand generic type arguments
-onto separate indented lines:
+For HTTP handler return types, expand generic type arguments onto separate indented lines:
 
 ```csharp
 private static async Task<
@@ -33,9 +29,8 @@ private static async Task<
     > UpdateItem(
 ```
 
-Method chaining is fine when each call is short and reads
-naturally. When chains are long, break each call onto its
-own line:
+Method chaining is fine when each call is short and reads naturally. When chains are long, break
+each call onto its own line:
 
 ```csharp
 var result = items
@@ -46,4 +41,12 @@ var result = items
 
 ## DTOs
 
-DTOs must be records and placed in the `Dtos` directory.
+DTOs must be records and placed in the `Dtos` directory. The multi-parameter rule applies — each
+property on its own line regardless of count:
+
+```csharp
+public record ItemDto(
+    int Id,
+    string Name,
+    string Description);
+```
