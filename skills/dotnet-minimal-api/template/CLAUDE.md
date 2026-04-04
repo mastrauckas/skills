@@ -8,7 +8,8 @@ alternatives.
 ## Code Style
 
 Always use extension blocks over extension methods. Lines must never exceed 80 characters. Each
-class must be in its own file. Prefer primary constructors over traditional constructors.
+class must be in its own file. Prefer primary constructors over traditional constructors. Always
+use `init` over `set` for properties.
 
 When declaring or calling with more than one parameter, each must be on its own line:
 
