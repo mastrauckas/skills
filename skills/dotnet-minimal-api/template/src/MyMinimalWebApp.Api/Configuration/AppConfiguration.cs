@@ -12,10 +12,7 @@ public static class AppConfigurationExtensions
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseSerilogRequestLogging(options =>
             {
-                options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
-                {
-                    diagnosticContext.Set("ClientIp", httpContext.Connection.RemoteIpAddress);
-                };
+                options.EnrichDiagnosticContext = EnrichWithClientIp;
             });
 
             // ORDER MATTERS: UseCors must come before UseAuthentication/UseAuthorization
@@ -50,4 +47,9 @@ public static class AppConfigurationExtensions
             app.ConfigureHttpRoutes();
         }
     }
+
+    internal static void EnrichWithClientIp(
+        IDiagnosticContext diagnosticContext,
+        HttpContext httpContext) =>
+        diagnosticContext.Set("ClientIp", httpContext.Connection.RemoteIpAddress);
 }
