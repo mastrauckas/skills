@@ -41,7 +41,8 @@ var result = items
 
 ## DTOs
 
-DTOs must be records and placed in the `Dtos` directory. The multi-parameter rule applies — each
+DTOs must be records and placed in the `Dtos` directory.
+Never use default parameter values in records. The multi-parameter rule applies — each
 property on its own line regardless of count:
 
 ```csharp
