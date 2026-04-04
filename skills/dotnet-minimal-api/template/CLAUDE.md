@@ -8,8 +8,8 @@ alternatives.
 ## Code Style
 
 Always use extension blocks over extension methods. Lines must never exceed 80 characters. Each
-class must be in its own file. Prefer primary constructors over traditional constructors. Always
-use `init` over `set` for properties.
+class must be in its own file. Prefer primary constructors over traditional constructors. Always use
+`init` over `set` for properties.
 
 When declaring or calling with more than one parameter, each must be on its own line:
 
@@ -40,11 +40,15 @@ var result = items
     .Select(x => new ItemDto(x.Id, x.Name));
 ```
 
+## Usings
+
+Never add `using` directives at the top of individual C# files. Always add them to `GlobalUsings.cs`
+instead.
+
 ## DTOs
 
-DTOs must be records and placed in the `Dtos` directory.
-Never use default parameter values in records. The multi-parameter rule applies — each
-property on its own line regardless of count:
+DTOs must be records and placed in the `Dtos` directory. Never use default parameter values in
+records. The multi-parameter rule applies — each property on its own line regardless of count:
 
 ```csharp
 public record ItemDto(
