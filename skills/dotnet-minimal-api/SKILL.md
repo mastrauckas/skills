@@ -16,9 +16,11 @@ metadata:
 
 ## Quick Start
 
-1. Ask for the **solution name** and **project name** (see [Scaffolding](#scaffolding-a-new-project))
+1. Ask for the **solution name** and **project name** (see
+   [Scaffolding](#scaffolding-a-new-project))
 2. Copy `template/` into the output directory
-3. Rename all src projects, all test projects, and all namespace references from `MyMinimalWebApp.Api` → `<ProjectName>` (see [Scaffolding](#scaffolding-a-new-project))
+3. Rename all src projects, all test projects, and all namespace references from
+   `MyMinimalWebApp.Api` → `<ProjectName>` (see [Scaffolding](#scaffolding-a-new-project))
 4. Replace `Item`/`Items` with your domain entity name
 5. Run `dotnet test` to verify everything passes
 
@@ -40,7 +42,7 @@ When asked to create a new project, **ask the user the following questions befor
      `node -e "console.log(Math.floor(Math.random()*1000)+8000)"`
 
    Present the generated port as a choice alongside a freeform option so the user can accept or
-   enter their own. Example prompt: *"Suggested HTTP port: 8432. Use this or enter your own."*
+   enter their own. Example prompt: _"Suggested HTTP port: 8432. Use this or enter your own."_
 
 Once you have the answers:
 
@@ -60,8 +62,11 @@ Once you have the answers:
 - Update all namespace references in test projects from `MyMinimalWebApp.Api` → `<ProjectName>`
 - Replace `Item`/`Items` with the appropriate domain entity name if provided
 - Replace the HTTP port `5262` with `<HttpPort>` and the HTTPS port `7105` with `<HttpPort + 1>` in:
+  (Note: the template's ports `5262`/`7105` are default .NET placeholders and do not follow the `+1`
+  convention — the convention only applies to generated ports for new projects.)
   - `src/<ProjectName>/Properties/launchSettings.json` (both `http` and `https` profiles)
-  - `src/<ProjectName>/appsettings.json` (both `Kestrel.Endpoints.Http.Url` and `Kestrel.Endpoints.Https.Url`)
+  - `src/<ProjectName>/appsettings.json` (both `Kestrel.Endpoints.Http.Url` and
+    `Kestrel.Endpoints.Https.Url`)
   - `http-files/items.http`
   - `http-files/health.http`
 
@@ -92,7 +97,8 @@ template/
         ItemEndpoints.cs                    ← 5 CRUD endpoints as private static handlers
       Dtos/
         ItemDto.cs                          ← response DTO
-        ItemRequests.cs                     ← CreateItemRequest, UpdateItemRequest
+        CreateItemRequest.cs                ← create request DTO
+        UpdateItemRequest.cs                ← update request DTO
       Logging/
         Log.cs                              ← [LoggerMessage] source-generated log methods
       Middleware/
@@ -124,9 +130,10 @@ template/
 ## Coding Conventions
 
 - All `using` statements → `GlobalUsings.cs` only
-- Use `var` when type is apparent from the right-hand side (constructor calls, `.ToList()`)
-- Use explicit type when type is not apparent (method return values, async results)
-- 2+ parameters → each on its own line
+- Use `var` for all local variables — enforced by `csharp_style_var_elsewhere = true:warning`;
+  explicit types for locals are a build error
+- For method declarations and calls with 2+ parameters: first parameter stays on the same line as
+  the method name, each additional parameter on its own line
 - Method chains with 2+ dots → each `.` on its own line
 - `TreatWarningsAsErrors = true` + `EnforceCodeStyleInBuild = true` — all style rules enforced at
   build time
@@ -138,17 +145,18 @@ template/
 ### Program.cs
 
 ```csharp
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-builder.Host.UseSerilog((ctx, config) =>
-    config.ReadFrom.Configuration(ctx.Configuration));
+var builder = WebApplication.CreateBuilder(args);
 builder.ConfigureBuilder();
 
-WebApplication app = builder.Build();
+var app = builder.Build();
 app.ConfigureApp();
 app.Run();
 
 public partial class Program { }
 ```
+
+`UseSerilog` is called inside `RegisterLogging()` in `BuilderConfiguration.cs` — do **not** add it
+to `Program.cs`.
 
 ### BuilderConfiguration.cs
 
@@ -215,6 +223,8 @@ public static class AppConfigurationExtensions
     {
         public void ConfigureApp()
         {
+            // Must be first — processes X-Forwarded-For / X-Forwarded-Proto
+            app.UseForwardedHeaders();
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseSerilogRequestLogging();
 
@@ -319,8 +329,10 @@ Server, MongoDB) are documented as comments in `RegisterLogging()` inside `Build
 
 Two test projects:
 
-- **`MyMinimalWebApp.Api.IntegrationTests`** — `WebApplicationFactory<Program>`, tests HTTP endpoints and middleware
-- **`MyMinimalWebApp.Api.UnitTests`** — tests service layer directly with Bogus for test data, NSubstitute for mocks
+- **`MyMinimalWebApp.Api.IntegrationTests`** — `WebApplicationFactory<Program>`, tests HTTP
+  endpoints and middleware
+- **`MyMinimalWebApp.Api.UnitTests`** — tests service layer directly with Bogus for test data,
+  NSubstitute for mocks
 
 `public partial class Program {}` at the bottom of `Program.cs` is required for
 `WebApplicationFactory<Program>`.

@@ -1,23 +1,19 @@
 namespace MyMinimalWebApp.Api.IntegrationTests.Endpoints;
 
-public class ItemEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
+public class ItemEndpointsTests(WebApplicationFactory<Program> factory)
+    : IClassFixture<WebApplicationFactory<Program>>
 {
-    private readonly HttpClient _client;
-
-    public ItemEndpointsTests(WebApplicationFactory<Program> factory)
-    {
-        _client = factory.CreateClient();
-    }
+    private readonly HttpClient _client = factory.CreateClient();
 
     [Fact]
     public async Task GetAllItems_ReturnsOkWithItems()
     {
-        // Act
-        HttpResponseMessage response = await _client.GetAsync("/api/items");
+        var response = await _client.GetAsync("/api/items");
 
-        // Assert
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        IEnumerable<ItemDto>? items = await response.Content.ReadFromJsonAsync<IEnumerable<ItemDto>>();
+        Assert.Equal(HttpStatusCode.OK,
+            response.StatusCode);
+        var items = await response.Content
+            .ReadFromJsonAsync<IEnumerable<ItemDto>>();
         Assert.NotNull(items);
         Assert.NotEmpty(items);
     }
@@ -25,32 +21,35 @@ public class ItemEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
     [Fact]
     public async Task GetItemById_WithValidId_ReturnsOkWithItem()
     {
-        // First get all items to find a valid ID
-        HttpResponseMessage getAllResponse = await _client.GetAsync("/api/items");
-        IEnumerable<ItemDto>? items = await getAllResponse.Content.ReadFromJsonAsync<IEnumerable<ItemDto>>();
-        int? itemId = items?.First().Id;
-        
-        if (itemId == null)
-            return;
+        // Arrange
+        var createRequest = new
+        {
+            name = "Test item",
+            description = "Test description"
+        };
+        var createResponse = await _client.PostAsJsonAsync("/api/items",
+            createRequest);
+        var created = await createResponse.Content
+            .ReadFromJsonAsync<ItemDto>();
 
         // Act
-        HttpResponseMessage response = await _client.GetAsync($"/api/items/{itemId}");
+        var response = await _client.GetAsync($"/api/items/{created!.Id}");
 
         // Assert
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        ItemDto? item = await response.Content.ReadFromJsonAsync<ItemDto>();
-        Assert.NotNull(item);
-        Assert.Equal(itemId, item.Id);
+        Assert.Equal(HttpStatusCode.OK,
+            response.StatusCode);
+        var body = await response.Content.ReadAsStringAsync();
+        Snapshot.Match(body,
+            matchOptions => matchOptions.IgnoreField("id"));
     }
 
     [Fact]
     public async Task GetItemById_WithInvalidId_ReturnsNotFound()
     {
-        // Act
-        HttpResponseMessage response = await _client.GetAsync("/api/items/999");
+        var response = await _client.GetAsync("/api/items/999");
 
-        // Assert
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound,
+            response.StatusCode);
     }
 
     [Fact]
@@ -60,130 +59,147 @@ public class ItemEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
         var request = new { name = "New item", description = "A new item" };
 
         // Act
-        HttpResponseMessage response = await _client.PostAsJsonAsync("/api/items", request);
+        var response = await _client.PostAsJsonAsync("/api/items",
+            request);
 
         // Assert
-        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        ItemDto? item = await response.Content.ReadFromJsonAsync<ItemDto>();
-        Assert.NotNull(item);
-        Assert.Equal("New item", item.Name);
-        Assert.Equal("A new item", item.Description);
+        Assert.Equal(HttpStatusCode.Created,
+            response.StatusCode);
+        var body = await response.Content.ReadAsStringAsync();
+        Snapshot.Match(body,
+            matchOptions => matchOptions.IgnoreField("id"));
     }
 
     [Fact]
-    public async Task CreateItem_WithoutName_ReturnsBadRequest()
+    public async Task CreateItem_WithEmptyName_ReturnsBadRequest()
     {
         // Arrange
         var request = new { name = "", description = "A new item" };
 
         // Act
-        HttpResponseMessage response = await _client.PostAsJsonAsync("/api/items", request);
+        var response = await _client.PostAsJsonAsync("/api/items",
+            request);
 
         // Assert
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest,
+            response.StatusCode);
     }
 
     [Fact]
-    public async Task CreateItem_WithoutDescription_ReturnsBadRequest()
+    public async Task CreateItem_WithEmptyDescription_ReturnsBadRequest()
     {
         // Arrange
         var request = new { name = "New item", description = "" };
 
         // Act
-        HttpResponseMessage response = await _client.PostAsJsonAsync("/api/items", request);
+        var response = await _client.PostAsJsonAsync("/api/items",
+            request);
 
         // Assert
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest,
+            response.StatusCode);
     }
 
     [Fact]
     public async Task UpdateItem_WithValidRequest_ReturnsOkWithUpdatedItem()
     {
-        // First get all items to find a valid ID
-        HttpResponseMessage getAllResponse = await _client.GetAsync("/api/items");
-        IEnumerable<ItemDto>? items = await getAllResponse.Content.ReadFromJsonAsync<IEnumerable<ItemDto>>();
-        int? itemId = items?.First().Id;
-        
-        if (itemId == null)
-            return;
-
         // Arrange
-        var request = new { name = "Updated item", description = "Updated description" };
+        var createRequest = new
+        {
+            name = "Original item",
+            description = "Original description"
+        };
+        var createResponse = await _client.PostAsJsonAsync("/api/items",
+            createRequest);
+        var created = await createResponse.Content
+            .ReadFromJsonAsync<ItemDto>();
+        var updateRequest = new
+        {
+            name = "Updated item",
+            description = "Updated description"
+        };
 
         // Act
-        HttpResponseMessage response = await _client.PutAsJsonAsync($"/api/items/{itemId}", request);
+        var response = await _client.PutAsJsonAsync(
+            $"/api/items/{created!.Id}",
+            updateRequest);
 
         // Assert
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        ItemDto? item = await response.Content.ReadFromJsonAsync<ItemDto>();
-        Assert.NotNull(item);
-        Assert.Equal("Updated item", item.Name);
-        Assert.Equal("Updated description", item.Description);
+        Assert.Equal(HttpStatusCode.OK,
+            response.StatusCode);
+        var body = await response.Content.ReadAsStringAsync();
+        Snapshot.Match(body,
+            matchOptions => matchOptions.IgnoreField("id"));
     }
 
     [Fact]
     public async Task UpdateItem_WithInvalidId_ReturnsNotFound()
     {
         // Arrange
-        var request = new { name = "Updated item", description = "Updated description" };
+        var request = new
+        {
+            name = "Updated item",
+            description = "Updated description"
+        };
 
         // Act
-        HttpResponseMessage response = await _client.PutAsJsonAsync("/api/items/999", request);
+        var response = await _client.PutAsJsonAsync("/api/items/999",
+            request);
 
         // Assert
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound,
+            response.StatusCode);
     }
 
     [Fact]
-    public async Task UpdateItem_WithoutName_ReturnsBadRequest()
+    public async Task UpdateItem_WithEmptyName_ReturnsBadRequest()
     {
-        // First get all items to find a valid ID
-        HttpResponseMessage getAllResponse = await _client.GetAsync("/api/items");
-        IEnumerable<ItemDto>? items = await getAllResponse.Content.ReadFromJsonAsync<IEnumerable<ItemDto>>();
-        int? itemId = items?.First().Id;
-        
-        if (itemId == null)
-            return;
-
         // Arrange
         var request = new { name = "", description = "Updated description" };
 
         // Act
-        HttpResponseMessage response = await _client.PutAsJsonAsync($"/api/items/{itemId}", request);
+        var response = await _client.PutAsJsonAsync("/api/items/1",
+            request);
 
         // Assert
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest,
+            response.StatusCode);
     }
 
     [Fact]
     public async Task DeleteItem_WithValidId_ReturnsNoContent()
     {
-        // First, get all items to know what ID to delete
-        HttpResponseMessage getResponse = await _client.GetAsync("/api/items");
-        IEnumerable<ItemDto>? items = await getResponse.Content.ReadFromJsonAsync<IEnumerable<ItemDto>>();
-        ItemDto? itemToDelete = items?.First();
-        
-        if (itemToDelete == null)
-            return;
+        // Arrange
+        var createRequest = new
+        {
+            name = "Item to delete",
+            description = "Will be deleted"
+        };
+        var createResponse = await _client.PostAsJsonAsync("/api/items",
+            createRequest);
+        var created = await createResponse.Content
+            .ReadFromJsonAsync<ItemDto>();
 
         // Act
-        HttpResponseMessage response = await _client.DeleteAsync($"/api/items/{itemToDelete.Id}");
+        var response = await _client.DeleteAsync($"/api/items/{created!.Id}");
 
         // Assert
-        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
-
-        // Verify it's deleted
-        HttpResponseMessage getAfterDelete = await _client.GetAsync($"/api/items/{itemToDelete.Id}");
-        Assert.Equal(HttpStatusCode.NotFound, getAfterDelete.StatusCode);
+        Assert.Equal(HttpStatusCode.NoContent,
+            response.StatusCode);
+        var getAfterDelete = await _client
+            .GetAsync($"/api/items/{created.Id}");
+        Assert.Equal(HttpStatusCode.NotFound,
+            getAfterDelete.StatusCode);
     }
 
     [Fact]
     public async Task DeleteItem_WithInvalidId_ReturnsNotFound()
     {
         // Act
-        HttpResponseMessage response = await _client.DeleteAsync("/api/items/999");
+        var response = await _client.DeleteAsync("/api/items/999");
 
         // Assert
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound,
+            response.StatusCode);
     }
 }

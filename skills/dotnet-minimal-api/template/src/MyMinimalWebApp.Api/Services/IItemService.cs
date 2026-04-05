@@ -2,11 +2,10 @@ namespace MyMinimalWebApp.Api.Services;
 
 public interface IItemService
 {
-    Task<IEnumerable<ItemDto>> GetAllAsync();
-    Task<ItemDto?> GetByIdAsync(int id);
-    Task<ItemDto> CreateAsync(ItemDto item);
-    Task<ItemDto?> UpdateAsync(
-        int id,
+    public Task<IEnumerable<ItemDto>> GetAllAsync();
+    public Task<ItemDto?> GetByIdAsync(int id);
+    public Task<ItemDto> CreateAsync(ItemDto item);
+    public Task<ItemDto?> UpdateAsync(int id,
         ItemDto item);
-    Task<bool> DeleteAsync(int id);
+    public Task<bool> DeleteAsync(int id);
 }

@@ -13,6 +13,8 @@
     <PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
     <PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
 
+    <PackageVersion Include="Snapshooter.Xunit" Version="1.3.1" />
+
     <!-- Testing -->
     <!-- NOTE: coverlet.collector 8.0.0 and Microsoft.NET.Test.Sdk 18.3.0 include DLLs blocked by Windows WDAC
          policy on some machines. Keep at 6.0.4 and 17.14.1 until the policy is updated. -->
