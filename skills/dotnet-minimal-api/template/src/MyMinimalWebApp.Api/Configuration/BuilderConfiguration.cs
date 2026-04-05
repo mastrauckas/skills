@@ -47,13 +47,15 @@ public static class BuilderConfigurationExtensions
 
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowLocalDevelopment", policy =>
-                {
-                    policy.WithOrigins(allowedOrigins)
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials();
-                });
+                options.AddPolicy(
+                    "AllowLocalDevelopment",
+                    policy =>
+                    {
+                        policy.WithOrigins(allowedOrigins)
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
+                    });
             });
         }
 
@@ -61,14 +63,18 @@ public static class BuilderConfigurationExtensions
         {
             builder.Services.AddRateLimiter(options =>
             {
-                options.AddFixedWindowLimiter("fixed", limiter =>
-                {
-                    limiter.PermitLimit = 100;
-                    limiter.Window = TimeSpan.FromSeconds(10);
-                    limiter.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-                    limiter.QueueLimit = 10;
-                });
-                options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+                options.AddFixedWindowLimiter(
+                    "fixed",
+                    limiter =>
+                    {
+                        limiter.PermitLimit = 100;
+                        limiter.Window = TimeSpan.FromSeconds(10);
+                        limiter.QueueProcessingOrder =
+                            QueueProcessingOrder.OldestFirst;
+                        limiter.QueueLimit = 10;
+                    });
+                options.RejectionStatusCode =
+                    StatusCodes.Status429TooManyRequests;
             });
         }
 
@@ -77,29 +83,35 @@ public static class BuilderConfigurationExtensions
             builder.Services
                 .AddHealthChecks()
                 // Liveness: only checks if the process is running (used by Kubernetes liveness probe)
-                .AddCheck("live", () => HealthCheckResult.Healthy(), tags: ["live"]);
-                // Readiness: add dependency checks tagged "ready" for Kubernetes readiness probe. Examples:
-                // .AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!)  // SQL Server connectivity (requires AspNetCore.HealthChecks.SqlServer)
-                // .AddNpgSql(builder.Configuration.GetConnectionString("DefaultConnection")!)     // PostgreSQL connectivity (requires AspNetCore.HealthChecks.NpgSql)
-                // .AddRedis(builder.Configuration.GetConnectionString("Redis")!)                  // Redis cache connectivity (requires AspNetCore.HealthChecks.Redis)
-                // .AddRabbitMQ(builder.Configuration.GetConnectionString("RabbitMQ")!)            // RabbitMQ message broker (requires AspNetCore.HealthChecks.RabbitMQ)
-                // .AddMongoDb(builder.Configuration.GetConnectionString("MongoDB")!)              // MongoDB connectivity (requires AspNetCore.HealthChecks.MongoDb)
-                // .AddCosmosDb(builder.Configuration.GetConnectionString("CosmosDb")!)            // Azure Cosmos DB connectivity (requires AspNetCore.HealthChecks.CosmosDb)
-                // .AddAzureServiceBusQueue(builder.Configuration.GetConnectionString("ServiceBus")!, "queue-name")  // Azure Service Bus queue (requires AspNetCore.HealthChecks.AzureServiceBus)
-                // .AddAzureBlobStorage(builder.Configuration.GetConnectionString("BlobStorage")!)   // Azure Blob Storage (requires AspNetCore.HealthChecks.AzureBlobStorage)
-                // .AddAzureQueueStorage(builder.Configuration.GetConnectionString("QueueStorage")!) // Azure Queue Storage (requires AspNetCore.HealthChecks.AzureStorage)
-                // .AddAzureKeyVault(new Uri(builder.Configuration["KeyVault:Uri"]!), new DefaultAzureCredential(), options => { }) // Azure Key Vault (requires AspNetCore.HealthChecks.AzureKeyVault)
-                // .AddUrlGroup(new Uri("https://external-service/health"), "external-service")    // External HTTP dependency reachability
-                // .AddProcessAllocatedMemoryHealthCheck(512);                                     // Fails if process exceeds 512 MB allocated memory
+                .AddCheck(
+                    "live",
+                    () => HealthCheckResult.Healthy(),
+                    tags: ["live"]);
+                    // Readiness: add dependency checks tagged "ready" for Kubernetes readiness probe. Examples:
+                    // .AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!)  // SQL Server connectivity (requires AspNetCore.HealthChecks.SqlServer)
+                    // .AddNpgSql(builder.Configuration.GetConnectionString("DefaultConnection")!)     // PostgreSQL connectivity (requires AspNetCore.HealthChecks.NpgSql)
+                    // .AddRedis(builder.Configuration.GetConnectionString("Redis")!)                  // Redis cache connectivity (requires AspNetCore.HealthChecks.Redis)
+                    // .AddRabbitMQ(builder.Configuration.GetConnectionString("RabbitMQ")!)            // RabbitMQ message broker (requires AspNetCore.HealthChecks.RabbitMQ)
+                    // .AddMongoDb(builder.Configuration.GetConnectionString("MongoDB")!)              // MongoDB connectivity (requires AspNetCore.HealthChecks.MongoDb)
+                    // .AddCosmosDb(builder.Configuration.GetConnectionString("CosmosDb")!)            // Azure Cosmos DB connectivity (requires AspNetCore.HealthChecks.CosmosDb)
+                    // .AddAzureServiceBusQueue(builder.Configuration.GetConnectionString("ServiceBus")!, "queue-name")  // Azure Service Bus queue (requires AspNetCore.HealthChecks.AzureServiceBus)
+                    // .AddAzureBlobStorage(builder.Configuration.GetConnectionString("BlobStorage")!)   // Azure Blob Storage (requires AspNetCore.HealthChecks.AzureBlobStorage)
+                    // .AddAzureQueueStorage(builder.Configuration.GetConnectionString("QueueStorage")!) // Azure Queue Storage (requires AspNetCore.HealthChecks.AzureStorage)
+                    // .AddAzureKeyVault(new Uri(builder.Configuration["KeyVault:Uri"]!), new DefaultAzureCredential(), options => { }) // Azure Key Vault (requires AspNetCore.HealthChecks.AzureKeyVault)
+                    // .AddUrlGroup(new Uri("https://external-service/health"), "external-service")    // External HTTP dependency reachability
+                    // .AddProcessAllocatedMemoryHealthCheck(512);                                     // Fails if process exceeds 512 MB allocated memory
         }
 
-        public void RegisterProblemDetails() => builder.Services.AddProblemDetails();
+        public void RegisterProblemDetails() =>
+            builder.Services.AddProblemDetails();
 
         public void RegisterForwardedHeaders()
         {
             builder.Services.Configure<ForwardedHeadersOptions>(options =>
             {
-                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                options.ForwardedHeaders =
+                    ForwardedHeaders.XForwardedFor |
+                    ForwardedHeaders.XForwardedProto;
 
                 // Uncomment the lines below when ALL of the following are true:
                 //   - Running behind a reverse proxy (nginx, Kubernetes ingress, AWS ALB, Azure Front Door)
