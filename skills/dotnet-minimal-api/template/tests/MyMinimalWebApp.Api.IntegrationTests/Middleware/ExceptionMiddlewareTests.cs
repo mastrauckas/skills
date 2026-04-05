@@ -1,6 +1,7 @@
 namespace MyMinimalWebApp.Api.IntegrationTests.Middleware;
 
-public class ExceptionMiddlewareTests(ThrowingAppFactory factory) : IClassFixture<ThrowingAppFactory>
+public class ExceptionMiddlewareTests(ThrowingAppFactory factory)
+    : IClassFixture<ThrowingAppFactory>
 {
     private readonly HttpClient _client = factory.CreateClient();
 
@@ -9,11 +10,12 @@ public class ExceptionMiddlewareTests(ThrowingAppFactory factory) : IClassFixtur
     {
         var response = await _client.GetAsync("/throw");
 
-        Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
-        Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
-
+        Assert.Equal(HttpStatusCode.InternalServerError,
+            response.StatusCode);
+        Assert.Equal("application/json",
+            response.Content.Headers.ContentType?.MediaType);
         var body = await response.Content.ReadAsStringAsync();
-        Assert.Contains("An error occurred while processing your request.", body);
-        Assert.Contains("500", body);
+        Snapshot.Match(body,
+            matchOptions => matchOptions.IgnoreField("traceId"));
     }
 }

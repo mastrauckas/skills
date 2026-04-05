@@ -10,5 +10,6 @@ global using MyMinimalWebApp.Api.Configuration;
 global using MyMinimalWebApp.Api.Dtos;
 
 global using Serilog;
+global using Snapshooter.Xunit;
 
 [assembly: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
