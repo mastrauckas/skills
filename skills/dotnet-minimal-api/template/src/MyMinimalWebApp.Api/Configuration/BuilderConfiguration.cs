@@ -47,8 +47,7 @@ public static class BuilderConfigurationExtensions
 
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy(
-                    "AllowLocalDevelopment",
+                options.AddPolicy("AllowLocalDevelopment",
                     policy =>
                     {
                         policy.WithOrigins(allowedOrigins)
@@ -63,8 +62,7 @@ public static class BuilderConfigurationExtensions
         {
             builder.Services.AddRateLimiter(options =>
             {
-                options.AddFixedWindowLimiter(
-                    "fixed",
+                options.AddFixedWindowLimiter("fixed",
                     limiter =>
                     {
                         limiter.PermitLimit = 100;
@@ -83,8 +81,7 @@ public static class BuilderConfigurationExtensions
             builder.Services
                 .AddHealthChecks()
                 // Liveness: only checks if the process is running (used by Kubernetes liveness probe)
-                .AddCheck(
-                    "live",
+                .AddCheck("live",
                     () => HealthCheckResult.Healthy(),
                     tags: ["live"]);
                     // Readiness: add dependency checks tagged "ready" for Kubernetes readiness probe. Examples:

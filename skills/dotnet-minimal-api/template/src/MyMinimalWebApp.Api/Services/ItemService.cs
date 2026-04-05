@@ -4,12 +4,10 @@ public class ItemService : IItemService
 {
     private readonly List<ItemDto> _items =
     [
-        new ItemDto(
-            1,
+        new ItemDto(1,
             "Item 1",
             "First item"),
-        new ItemDto(
-            2,
+        new ItemDto(2,
             "Item 2",
             "Second item"),
     ];
@@ -27,16 +25,14 @@ public class ItemService : IItemService
 
     public Task<ItemDto> CreateAsync(ItemDto item)
     {
-        var newItem = new ItemDto(
-            _nextId++,
+        var newItem = new ItemDto(_nextId++,
             item.Name,
             item.Description);
         _items.Add(newItem);
         return Task.FromResult(newItem);
     }
 
-    public Task<ItemDto?> UpdateAsync(
-        int id,
+    public Task<ItemDto?> UpdateAsync(int id,
         ItemDto item)
     {
         var index = _items.FindIndex(x => x.Id == id);
@@ -45,8 +41,7 @@ public class ItemService : IItemService
             return Task.FromResult<ItemDto?>(null);
         }
 
-        var updatedItem = new ItemDto(
-            id,
+        var updatedItem = new ItemDto(id,
             item.Name,
             item.Description);
         _items[index] = updatedItem;

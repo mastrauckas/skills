@@ -34,14 +34,12 @@ public static class AppConfigurationExtensions
 
             // Health checks — map combined, liveness, and readiness probes
             app.MapHealthChecks("/health");
-            app.MapHealthChecks(
-                "/health/live",
+            app.MapHealthChecks("/health/live",
                 new HealthCheckOptions
                 {
                     Predicate = check => check.Tags.Contains("live")
                 });
-            app.MapHealthChecks(
-                "/health/ready",
+            app.MapHealthChecks("/health/ready",
                 new HealthCheckOptions
                 {
                     Predicate = check => check.Tags.Contains("ready")
@@ -55,7 +53,6 @@ public static class AppConfigurationExtensions
     internal static void EnrichWithClientIp(
         IDiagnosticContext diagnosticContext,
         HttpContext httpContext) =>
-        diagnosticContext.Set(
-            "ClientIp",
+        diagnosticContext.Set("ClientIp",
             httpContext.Connection.RemoteIpAddress);
 }

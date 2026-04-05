@@ -1,7 +1,6 @@
 namespace MyMinimalWebApp.Api.Middleware;
 
-public class ExceptionMiddleware(
-    RequestDelegate next,
+public class ExceptionMiddleware(RequestDelegate next,
     ILogger<ExceptionMiddleware> logger)
 {
     public async Task InvokeAsync(HttpContext context)
@@ -12,7 +11,8 @@ public class ExceptionMiddleware(
         }
         catch (Exception ex)
         {
-            logger.LogExceptionInMiddleware(ex.Message, ex);
+            logger.LogExceptionInMiddleware(ex.Message,
+                ex);
             await HandleExceptionAsync(context);
         }
     }

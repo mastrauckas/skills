@@ -11,13 +11,25 @@ Always use extension blocks over extension methods. Lines must never exceed 80 c
 class must be in its own file. Prefer primary constructors over traditional constructors. Always use
 `init` over `set` for properties.
 
-When declaring or calling with more than one parameter, each must be on its own line:
+For **record declarations**, each parameter must be on its own line with the opening parenthesis
+alone on the first line:
 
 ```csharp
 public record ItemDto(
     int Id,
     string Name,
     string Description);
+```
+
+For **method declarations and calls** with more than one parameter, the first parameter stays on the
+same line as the method name. Each additional parameter goes on its own line:
+
+```csharp
+public Task<ItemDto?> UpdateAsync(int id,
+    ItemDto item);
+
+logger.LogExceptionInMiddleware(ex.Message,
+    ex);
 ```
 
 For HTTP handler return types, expand generic type arguments onto separate indented lines:
@@ -27,7 +39,9 @@ private static async Task<
     Results<
         Ok<ItemDto>,
         NotFound>
-    > UpdateItem(
+    > UpdateItem(int id,
+    UpdateItemRequest request,
+    IItemService service)
 ```
 
 Method chaining is fine when each call is short and reads naturally. When chains are long, break

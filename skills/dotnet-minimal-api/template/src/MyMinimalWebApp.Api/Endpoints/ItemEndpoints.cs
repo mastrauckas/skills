@@ -13,13 +13,15 @@ public static class ItemEndpointExtensions
                 // endpoints in this group:
                 // .RequireAuthorization();
 
-            group.MapGet("/", GetAllItems)
+            group.MapGet("/",
+                    GetAllItems)
                 .WithName("ListItems")
                 .WithDisplayName("List Items")
                 .WithSummary("List all items")
                 .WithDescription("Returns all items in the system.");
 
-            group.MapGet("/{id:int}", GetItemById)
+            group.MapGet("/{id:int}",
+                    GetItemById)
                 .WithName("GetItem")
                 .WithDisplayName("Get Item")
                 .WithSummary("Get an item by ID")
@@ -27,14 +29,16 @@ public static class ItemEndpointExtensions
                     "Returns a single item matching the given ID, " +
                     "or 404 if not found.");
 
-            group.MapPost("/", CreateItem)
+            group.MapPost("/",
+                    CreateItem)
                 .WithName("CreateItem")
                 .WithDisplayName("Create Item")
                 .WithSummary("Create a new item")
                 .WithDescription(
                     "Creates a new item and returns the created resource.");
 
-            group.MapPut("/{id:int}", UpdateItem)
+            group.MapPut("/{id:int}",
+                    UpdateItem)
                 .WithName("UpdateItem")
                 .WithDisplayName("Update Item")
                 .WithSummary("Update an item")
@@ -42,7 +46,8 @@ public static class ItemEndpointExtensions
                     "Updates an existing item by ID, " +
                     "or returns 404 if not found.");
 
-            group.MapDelete("/{id:int}", DeleteItem)
+            group.MapDelete("/{id:int}",
+                    DeleteItem)
                 .WithName("DeleteItem")
                 .WithDisplayName("Delete Item")
                 .WithSummary("Delete an item")
@@ -64,8 +69,7 @@ public static class ItemEndpointExtensions
         Results<
             Ok<ItemDto>,
             NotFound>
-        > GetItemById(
-        int id,
+        > GetItemById(int id,
         IItemService service)
     {
         var item = await service.GetByIdAsync(id);
@@ -76,17 +80,14 @@ public static class ItemEndpointExtensions
 
     private static async Task<
         Created<ItemDto>
-        > CreateItem(
-        CreateItemRequest request,
+        > CreateItem(CreateItemRequest request,
         IItemService service)
     {
-        var item = new ItemDto(
-            0,
+        var item = new ItemDto(0,
             request.Name,
             request.Description);
         var created = await service.CreateAsync(item);
-        return TypedResults.Created(
-            $"/api/items/{created.Id}",
+        return TypedResults.Created($"/api/items/{created.Id}",
             created);
     }
 
@@ -94,17 +95,14 @@ public static class ItemEndpointExtensions
         Results<
             Ok<ItemDto>,
             NotFound>
-        > UpdateItem(
-        int id,
+        > UpdateItem(int id,
         UpdateItemRequest request,
         IItemService service)
     {
-        var item = new ItemDto(
-            0,
+        var item = new ItemDto(0,
             request.Name,
             request.Description);
-        var updated = await service.UpdateAsync(
-            id,
+        var updated = await service.UpdateAsync(id,
             item);
         return updated is null
             ? TypedResults.NotFound()
@@ -115,8 +113,7 @@ public static class ItemEndpointExtensions
         Results<
             NoContent,
             NotFound>
-        > DeleteItem(
-        int id,
+        > DeleteItem(int id,
         IItemService service)
     {
         var deleted = await service.DeleteAsync(id);
