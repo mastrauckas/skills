@@ -130,8 +130,8 @@ template/
 ## Coding Conventions
 
 - All `using` statements → `GlobalUsings.cs` only
-- Use `var` when type is apparent from the right-hand side (constructor calls, `.ToList()`)
-- Use explicit type when type is not apparent (method return values, async results)
+- Use `var` for all local variables — enforced by `csharp_style_var_elsewhere = true:warning`;
+  explicit types for locals are a build error
 - For method declarations and calls with 2+ parameters: first parameter stays on the same line as
   the method name, each additional parameter on its own line
 - Method chains with 2+ dots → each `.` on its own line

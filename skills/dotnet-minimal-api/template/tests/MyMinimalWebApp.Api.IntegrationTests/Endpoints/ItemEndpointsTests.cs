@@ -71,7 +71,7 @@ public class ItemEndpointsTests(WebApplicationFactory<Program> factory)
     }
 
     [Fact]
-    public async Task CreateItem_WithoutName_ReturnsBadRequest()
+    public async Task CreateItem_WithEmptyName_ReturnsBadRequest()
     {
         // Arrange
         var request = new { name = "", description = "A new item" };
@@ -86,7 +86,7 @@ public class ItemEndpointsTests(WebApplicationFactory<Program> factory)
     }
 
     [Fact]
-    public async Task CreateItem_WithoutDescription_ReturnsBadRequest()
+    public async Task CreateItem_WithEmptyDescription_ReturnsBadRequest()
     {
         // Arrange
         var request = new { name = "New item", description = "" };
@@ -152,7 +152,7 @@ public class ItemEndpointsTests(WebApplicationFactory<Program> factory)
     }
 
     [Fact]
-    public async Task UpdateItem_WithoutName_ReturnsBadRequest()
+    public async Task UpdateItem_WithEmptyName_ReturnsBadRequest()
     {
         // Arrange
         var request = new { name = "", description = "Updated description" };

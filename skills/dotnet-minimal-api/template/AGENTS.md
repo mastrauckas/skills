@@ -55,6 +55,12 @@ var result = items
     .Select(x => new ItemDto(x.Id, x.Name));
 ```
 
+## Locals
+
+Always use `var` for local variables. The editorconfig enforces
+`csharp_style_var_elsewhere = true:warning`, which combined with `TreatWarningsAsErrors` makes
+explicit types a build error for locals.
+
 ## Usings
 
 Never add `using` directives at the top of individual C# files. Always add them to `GlobalUsings.cs`

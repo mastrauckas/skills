@@ -11,6 +11,6 @@ public class SerilogEnrichmentTests
 
         AppConfigurationExtensions.EnrichWithClientIp(context, httpContext);
 
-        Assert.True(context.WasCalled);
+        Assert.Equal("ClientIp", context.LastPropertyName);
     }
 }
