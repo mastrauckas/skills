@@ -6,8 +6,7 @@ internal static partial class Log
         EventId = 1001,
         Level = LogLevel.Error,
         Message = "Unhandled exception in request: {Message}")]
-    internal static partial void LogExceptionInMiddleware(
-        this ILogger logger,
+    internal static partial void LogExceptionInMiddleware(this ILogger logger,
         string message,
         Exception exception);
 }
