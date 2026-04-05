@@ -6,89 +6,121 @@ public static class ItemEndpointExtensions
     {
         public void MapItemEndpoints(RouteGroupBuilder root)
         {
-            RouteGroupBuilder group = root
+            var group = root
                 .MapGroup("/items")
                 .WithTags("Items");
-                // Uncomment to require authentication for all endpoints in this group:
-                // .RequireAuthorization();
+            // Uncomment to require authentication for all
+            // endpoints in this group:
+            // .RequireAuthorization();
 
-            group.MapGet("/", GetAllItems)
+            group.MapGet("/",
+                    GetAllItems)
                 .WithName("ListItems")
                 .WithDisplayName("List Items")
                 .WithSummary("List all items")
                 .WithDescription("Returns all items in the system.");
 
-            group.MapGet("/{id:int}", GetItemById)
+            group.MapGet("/{id:int}",
+                    GetItemById)
                 .WithName("GetItem")
                 .WithDisplayName("Get Item")
                 .WithSummary("Get an item by ID")
-                .WithDescription("Returns a single item matching the given ID, or 404 if not found.");
+                .WithDescription(
+                    "Returns a single item matching the given ID, " +
+                    "or 404 if not found.");
 
-            group.MapPost("/", CreateItem)
+            group.MapPost("/",
+                    CreateItem)
                 .WithName("CreateItem")
                 .WithDisplayName("Create Item")
                 .WithSummary("Create a new item")
-                .WithDescription("Creates a new item and returns the created resource.");
+                .WithDescription(
+                    "Creates a new item and returns the created resource.");
 
-            group.MapPut("/{id:int}", UpdateItem)
+            group.MapPut("/{id:int}",
+                    UpdateItem)
                 .WithName("UpdateItem")
                 .WithDisplayName("Update Item")
                 .WithSummary("Update an item")
-                .WithDescription("Updates an existing item by ID, or returns 404 if not found.");
+                .WithDescription(
+                    "Updates an existing item by ID, " +
+                    "or returns 404 if not found.");
 
-            group.MapDelete("/{id:int}", DeleteItem)
+            group.MapDelete("/{id:int}",
+                    DeleteItem)
                 .WithName("DeleteItem")
                 .WithDisplayName("Delete Item")
                 .WithSummary("Delete an item")
-                .WithDescription("Deletes an item by ID, or returns 404 if not found.");
+                .WithDescription(
+                    "Deletes an item by ID, or returns 404 if not found.");
         }
     }
 
-    private static async Task<Ok<IEnumerable<ItemDto>>> GetAllItems(IItemService service)
+#pragma warning disable IDE0051
+    private static async Task<
+        Ok<IEnumerable<ItemDto>>
+        > GetAllItems(IItemService service)
     {
-        IEnumerable<ItemDto> items = await service.GetAllAsync();
+        var items = await service.GetAllAsync();
         return TypedResults.Ok(items);
     }
 
-    private static async Task<Results<Ok<ItemDto>, NotFound>> GetItemById(
-        int id,
+    private static async Task<
+        Results<
+            Ok<ItemDto>,
+            NotFound>
+        > GetItemById(int id,
         IItemService service)
     {
-        ItemDto? item = await service.GetByIdAsync(id);
+        var item = await service.GetByIdAsync(id);
         return item is null
             ? TypedResults.NotFound()
             : TypedResults.Ok(item);
     }
 
-    private static async Task<Created<ItemDto>> CreateItem(
-        CreateItemRequest request,
+    private static async Task<
+        Created<ItemDto>
+        > CreateItem(CreateItemRequest request,
         IItemService service)
     {
-        var item = new ItemDto(0, request.Name, request.Description);
-        ItemDto created = await service.CreateAsync(item);
-        return TypedResults.Created($"/api/items/{created.Id}", created);
+        var item = new ItemDto(0,
+            request.Name,
+            request.Description);
+        var created = await service.CreateAsync(item);
+        return TypedResults.Created($"/api/items/{created.Id}",
+            created);
     }
 
-    private static async Task<Results<Ok<ItemDto>, NotFound>> UpdateItem(
-        int id,
+    private static async Task<
+        Results<
+            Ok<ItemDto>,
+            NotFound>
+        > UpdateItem(int id,
         UpdateItemRequest request,
         IItemService service)
     {
-        var item = new ItemDto(0, request.Name, request.Description);
-        ItemDto? updated = await service.UpdateAsync(id, item);
+        var item = new ItemDto(0,
+            request.Name,
+            request.Description);
+        var updated = await service.UpdateAsync(id,
+            item);
         return updated is null
             ? TypedResults.NotFound()
             : TypedResults.Ok(updated);
     }
 
-    private static async Task<Results<NoContent, NotFound>> DeleteItem(
-        int id,
+    private static async Task<
+        Results<
+            NoContent,
+            NotFound>
+        > DeleteItem(int id,
         IItemService service)
     {
-        bool deleted = await service.DeleteAsync(id);
+        var deleted = await service.DeleteAsync(id);
         return deleted
             ? TypedResults.NoContent()
             : TypedResults.NotFound();
     }
+#pragma warning restore IDE0051
 }
 

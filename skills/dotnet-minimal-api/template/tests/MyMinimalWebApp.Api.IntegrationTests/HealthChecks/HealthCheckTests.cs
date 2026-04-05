@@ -8,7 +8,7 @@ public class HealthCheckTests(WebApplicationFactory<Program> factory)
     [Fact]
     public async Task Health_ReturnsHealthy()
     {
-        HttpResponseMessage response = await _client.GetAsync("/health");
+        var response = await _client.GetAsync("/health");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
@@ -16,7 +16,7 @@ public class HealthCheckTests(WebApplicationFactory<Program> factory)
     [Fact]
     public async Task HealthLive_ReturnsHealthy()
     {
-        HttpResponseMessage response = await _client.GetAsync("/health/live");
+        var response = await _client.GetAsync("/health/live");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
@@ -24,7 +24,7 @@ public class HealthCheckTests(WebApplicationFactory<Program> factory)
     [Fact]
     public async Task HealthReady_ReturnsHealthy()
     {
-        HttpResponseMessage response = await _client.GetAsync("/health/ready");
+        var response = await _client.GetAsync("/health/ready");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
